@@ -1,38 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:qurban_mart/OnboardingPage.dart';
 
-import 'LoginPage.dart';
-
-// Pastikan file HomePage.dart dan halaman lainnya sudah Anda pindahkan ke folder lib/ di repo baru ini
+import 'onboardingPage.dart';
 
 void main() {
-  runApp(const QurbanApp());
+  runApp(const QurbanMartApp());
 }
 
-class QurbanApp extends StatelessWidget {
-  const QurbanApp({super.key});
+class QurbanMartApp extends StatelessWidget {
+  const QurbanMartApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'QurbanKu',
-      debugShowCheckedModeBanner:
-          false, // Menghilangkan pita merah "DEBUG" di kanan atas
+      title: 'QurbanMart',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // Tema utama aplikasi disesuaikan dengan hijau gelap QurbanKu
-        primaryColor: const Color(0xFF0F5A38),
-        scaffoldBackgroundColor: const Color(0xFFF9FAFB),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0F5A38),
-          primary: const Color(0xFF0F5A38),
-        ),
-        useMaterial3: true, // Menggunakan desain UI Flutter terbaru
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          iconTheme: IconThemeData(color: Color(0xFF0F5A38)),
+        primaryColor: const Color(0xFF1B5E20), // Hijau utama
+        scaffoldBackgroundColor: Colors.white,
+        fontFamily: 'Roboto', // Sesuaikan dengan font pilihan Anda
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF1B5E20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
         ),
       ),
-      home: const LoginPage(), // Halaman pertama yang dibuka adalah LoginPage
+      home: const OnboardingPage(),
     );
   }
 }

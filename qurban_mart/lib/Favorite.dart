@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'HomePage.dart';
-import 'SeacrhPage.dart';
+import 'SearchPage.dart';
 import 'OrderPage.dart';
 import 'AccountPage.dart';
 

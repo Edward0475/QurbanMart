@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'LoginPage.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -17,8 +18,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     {
       'image': 'Asset/image/Onboarding1.png',
       'title': 'Pilih Hewan\nQurban Terbaik',
-      'description':
-          'Berbagai pilihan sapi, kambing,\ndan domba dari peternakan\nterpercaya.',
+      'description': 'Berbagai pilihan sapi, kambing,\ndan domba dari peternakan\nterpercaya.',
     },
     {
       'image': 'Asset/image/Onboarding2.png',
@@ -29,8 +29,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     {
       'image': 'Asset/image/Onboarding3.png',
       'title': 'Pengiriman Hingga\nLokasi Tujuan',
-      'description':
-          'Tersedia layanan pengiriman\natau pembelian langsung\ndi peternakan.',
+      'description': 'Tersedia layanan pengiriman\natau pembelian langsung\ndi peternakan.',
     },
   ];
 
@@ -48,9 +47,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   void _goToLogin() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (context) => const LoginPage(),
-      ),
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 
@@ -74,20 +71,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
             });
           },
           itemBuilder: (context, index) {
-            return _buildOnboardingPage(
-              onboardingData[index],
-              index,
-            );
+            return _buildOnboardingPage(onboardingData[index], index);
           },
         ),
       ),
     );
   }
 
-  Widget _buildOnboardingPage(
-    Map<String, String> data,
-    int index,
-  ) {
+  Widget _buildOnboardingPage(Map<String, String> data, int index) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -120,12 +111,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             child: Container(
               width: double.infinity,
               margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.fromLTRB(
-                10,
-                15,
-                10,
-                14,
-              ),
+              padding: const EdgeInsets.fromLTRB(10, 15, 10, 14),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFFEFA),
                 borderRadius: BorderRadius.circular(10),
@@ -161,12 +147,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
                         child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               data['title']!,
@@ -202,31 +185,24 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       // INDICATOR
                       Expanded(
                         child: Row(
-                          children: List.generate(
-                            onboardingData.length,
-                            (dotIndex) {
-                              final bool active =
-                                  dotIndex == _currentPage;
+                          children: List.generate(onboardingData.length, (
+                            dotIndex,
+                          ) {
+                            final bool active = dotIndex == _currentPage;
 
-                              return AnimatedContainer(
-                                duration: const Duration(
-                                  milliseconds: 200,
-                                ),
-                                margin: const EdgeInsets.only(
-                                  right: 4,
-                                ),
-                                width: active ? 13 : 4,
-                                height: 3,
-                                decoration: BoxDecoration(
-                                  color: active
-                                      ? const Color(0xFF087A4B)
-                                      : const Color(0xFFBFC9C2),
-                                  borderRadius:
-                                      BorderRadius.circular(5),
-                                ),
-                              );
-                            },
-                          ),
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              margin: const EdgeInsets.only(right: 4),
+                              width: active ? 13 : 4,
+                              height: 3,
+                              decoration: BoxDecoration(
+                                color: active
+                                    ? const Color(0xFF087A4B)
+                                    : const Color(0xFFBFC9C2),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            );
+                          }),
                         ),
                       ),
 
@@ -263,13 +239,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       child: ElevatedButton(
                         onPressed: _goToLogin,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color(0xFF087A4B),
+                          backgroundColor: const Color(0xFF087A4B),
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(6),
                           ),
                         ),
                         child: const Text(
