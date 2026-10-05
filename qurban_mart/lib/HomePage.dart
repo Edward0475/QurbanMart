@@ -4,509 +4,383 @@ import 'AccountPage.dart';
 import 'CartPage.dart';
 import 'OrderPage.dart';
 import 'Favorite.dart';
-import 'SeacrhPage.dart';
+import 'SearchPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final Color _primaryGreen = const Color(0xFF0F5A38);
-  final Color _lightGreen = const Color(0xFFE8F3ED);
-  final int _selectedIndex = 0;
+  static const Color primaryGreen = Color(0xFF0F5A38);
+  static const Color darkGreen = Color(0xFF123B2B);
+  static const Color lightGreen = Color(0xFFE8F3ED);
+  static const Color cream = Color(0xFFFFF7E6);
+
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
+      backgroundColor: const Color(0xFFF8FAF9),
+
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 120),
+            padding: const EdgeInsets.only(bottom: 110),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // --- APP BAR ---
-                SafeArea(
-                  bottom: false,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Image.asset(
-                              'Asset/Image/QurbanMart.png',
-                              height: 45,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Container(
-                                    height: 45,
-                                    width: 45,
-                                    decoration: BoxDecoration(
-                                      color: _primaryGreen,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: const Icon(
-                                      Icons.pets,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                            ),
-                            const SizedBox(width: 12),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'QurbanKu',
-                                  style: TextStyle(
-                                    color: _primaryGreen,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: -0.5,
-                                  ),
-                                ),
-                                const Text(
-                                  'Berkah untuk Semua',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.notifications_none,
-                            color: Colors.black87,
-                            size: 28,
-                          ),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // =========================
+                // HEADER
+                // =========================
+                _buildHeader(),
+
                 const SizedBox(height: 10),
 
-                // --- BANNER UTAMA ---
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    height: 160,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(
-                            'Asset/Image/Bannersapi.png',
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Container(
-                                  color: _primaryGreen.withOpacity(0.8),
-                                ),
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.black.withOpacity(0.7),
-                                Colors.transparent,
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'Kurban & Aqiqah',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                'Mudah, Aman, dan Transparan',
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(height: 15),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: Colors.white.withOpacity(0.5),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const [
-                                    Text(
-                                      'Pesan Sekarang',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Icon(
-                                      Icons.arrow_forward,
-                                      color: Colors.white,
-                                      size: 14,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // =========================
+                // BANNER
+                // =========================
+                _buildHeroBanner(),
+
                 const SizedBox(height: 20),
 
-                // --- SEARCH BAR ---
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (_, __, ___) => const SearchPage(),
-                          transitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
-                        border: Border.all(color: Colors.grey.shade300),
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 15),
-                          Icon(
-                            Icons.search,
-                            color: Colors.grey.shade500,
-                            size: 22,
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            'Cari hewan, paket aqiqah, atau peternak...',
-                            style: TextStyle(
-                              color: Colors.grey.shade500,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 25),
+                // =========================
+                // SEARCH
+                // =========================
+                _buildSearchBar(),
 
-                // --- KATEGORI KURBAN ---
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Text(
-                    'Kategori Kurban',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
-                      color: Color(0xFF1B3D2F),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 15),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildCategoryIcon(
-                        Icons.pets,
-                        'Sapi',
-                        const Color(0xFFFFF7E6),
-                      ),
-                      _buildCategoryIcon(
-                        Icons.set_meal,
-                        'Kambing',
-                        const Color(0xFFFFF7E6),
-                      ),
-                      _buildCategoryIcon(
-                        Icons.cruelty_free,
-                        'Domba',
-                        const Color(0xFFFFF7E6),
-                      ),
-                      _buildCategoryIcon(
-                        Icons.pie_chart,
-                        'Patungan\nSapi 1/7',
-                        const Color(0xFFE5F2E6),
-                      ),
-                    ],
-                  ),
-                ),
+                const SizedBox(height: 28),
+
+                // =========================
+                // KATEGORI KURBAN
+                // =========================
+                _buildCategorySection(),
+
                 const SizedBox(height: 30),
 
-                // --- KATEGORI AQIQAH ---
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const Text(
-                        'Kategori Aqiqah',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900,
-                          color: Color(0xFF1B3D2F),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Lihat Semua',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: _primaryGreen,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: _primaryGreen,
-                            size: 16,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 15),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _buildAqiqahCard(
-                          'Kambing Hidup',
-                          'https://images.unsplash.com/photo-1524024973431-2ad890184eb7?auto=format&fit=crop&w=300&q=80',
-                        ),
-                      ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: _buildAqiqahCard(
-                          'Paket Siap Saji',
-                          'https://images.unsplash.com/photo-1555126634-ae235c345cc6?auto=format&fit=crop&w=300&q=80',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 25),
+                // =========================
+                // PILIHAN HEWAN
+                // =========================
+                _buildAnimalSection(),
 
-                // --- TRUST BADGE ---
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: _lightGreen,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: _primaryGreen,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.check,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 15),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Transparan • Sehat • Terpercaya',
-                                style: TextStyle(
-                                  color: _primaryGreen,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'Hewan pilihan dengan sertifikat kesehatan',
-                                style: TextStyle(
-                                  color: Colors.grey.shade600,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Icon(Icons.chevron_right, color: _primaryGreen),
-                      ],
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 28),
+
+                // =========================
+                // TRUST BANNER
+                // =========================
+                _buildTrustBanner(),
               ],
             ),
           ),
 
-          // --- BOTTOM NAVIGATION BAR ---
+          // =========================
+          // BOTTOM NAVIGATION
+          // =========================
           Positioned(
-            bottom: 20,
-            left: 20,
-            right: 20,
-            child: Container(
-              height: 65,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(40),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
-                    blurRadius: 20,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildBottomNavItem(Icons.home, 'Home', 0),
-                  _buildBottomNavItem(Icons.search_outlined, 'Search', 1),
-                  _buildBottomNavItem(Icons.favorite_border, 'Favorit', 2),
-                  _buildBottomNavItem(Icons.receipt_long, 'Order', 3),
-                  _buildBottomNavItem(Icons.person_outline, 'Akun', 4),
-                ],
-              ),
-            ),
+            left: 18,
+            right: 18,
+            bottom: 18,
+            child: _buildBottomNavigation(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCategoryIcon(IconData icon, String title, Color bgColor) {
-    return Column(
-      children: [
-        Container(
-          height: 65,
-          width: 65,
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Icon(icon, color: _primaryGreen, size: 30),
+  // ============================================================
+  // HEADER
+  // ============================================================
+
+  Widget _buildHeader() {
+    return SafeArea(
+      bottom: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
+        child: Row(
+          children: [
+            // LOGO
+            Container(
+              height: 48,
+              width: 48,
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: lightGreen,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Image.asset(
+                'Asset/image/QurbanMart.png',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(
+                    Icons.pets,
+                    color: primaryGreen,
+                    size: 28,
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(width: 12),
+
+            // TITLE
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'QurbanKu',
+                    style: TextStyle(
+                      color: darkGreen,
+                      fontSize: 21,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    'Berkah untuk Semua',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // NOTIFICATION
+            _headerButton(
+              Icons.notifications_none_rounded,
+              () {},
+            ),
+
+            const SizedBox(width: 8),
+
+            // CART
+            _headerButton(
+              Icons.shopping_bag_outlined,
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CartPage(),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
-        const SizedBox(height: 8),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF1B3D2F),
+      ),
+    );
+  }
+
+  Widget _headerButton(
+    IconData icon,
+    VoidCallback onTap,
+  ) {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(13),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(13),
+        child: Container(
+          height: 42,
+          width: 42,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(13),
+            border: Border.all(
+              color: Colors.grey.shade200,
+            ),
+          ),
+          child: Icon(
+            icon,
+            color: darkGreen,
+            size: 22,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ============================================================
+  // HERO BANNER
+  // ============================================================
+
+  Widget _buildHeroBanner() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Image.asset(
+          'Asset/image/QA.png',
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  // ============================================================
+  // SEARCH BAR
+  // ============================================================
+
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SearchPage(),
+            ),
+          );
+        },
+        child: Container(
+          height: 54,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(
+              color: Colors.grey.shade200,
+            ),
+          ),
+          child: Row(
+            children: [
+              const SizedBox(width: 17),
+
+              Icon(
+                Icons.search_rounded,
+                color: Colors.grey.shade500,
+                size: 23,
+              ),
+
+              const SizedBox(width: 11),
+
+              Text(
+                'Cari hewan, paket aqiqah, atau peternak...',
+                style: TextStyle(
+                  color: Colors.grey.shade500,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ============================================================
+  // CATEGORY
+  // ============================================================
+
+  Widget _buildCategorySection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            'Kategori Kurban',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+              color: darkGreen,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 16),
+
+        SizedBox(
+          height: 125,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+            ),
+            scrollDirection: Axis.horizontal,
+            children: [
+              // SAPI
+              _categoryItem(
+                'Asset/image/logoSapi.png',
+                'Sapi',
+              ),
+
+              const SizedBox(width: 28),
+
+              // KAMBING
+              _categoryItem(
+                'Asset/image/logoKambing.png',
+                'Kambing',
+              ),
+
+              const SizedBox(width: 28),
+
+              // DOMBA
+              _categoryItem(
+                'Asset/image/logoDomba.png',
+                'Domba',
+              ),
+            ],
           ),
         ),
       ],
     );
   }
 
-  Widget _buildAqiqahCard(String title, String imageUrl) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.grey.shade200),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+  // ============================================================
+  // CATEGORY ITEM
+  // ============================================================
+
+  Widget _categoryItem(
+    String imagePath,
+    String title,
+  ) {
+    return SizedBox(
+      width: 70,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
+          Container(
+            height: 68,
+            width: 68,
+            decoration: BoxDecoration(
+              color: cream,
+              borderRadius: BorderRadius.circular(17),
             ),
-            child: Image.network(
-              imageUrl,
-              height: 80,
-              width: double.infinity,
-              fit: BoxFit.cover,
+
+            child: Center(
+              child: Image.asset(
+                imagePath,
+                width: 40,
+                height: 40,
+                fit: BoxFit.contain,
+
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(
+                    Icons.image_not_supported_outlined,
+                    color: Colors.grey,
+                    size: 30,
+                  );
+                },
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF1B3D2F),
-              ),
+
+          const SizedBox(height: 9),
+
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 11,
+              height: 1.2,
+              fontWeight: FontWeight.w700,
+              color: darkGreen,
             ),
           ),
         ],
@@ -514,57 +388,466 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildBottomNavItem(IconData icon, String label, int index) {
-    bool isSelected = _selectedIndex == index;
+  // ============================================================
+  // PILIHAN HEWAN
+  // ============================================================
+
+  Widget _buildAnimalSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Pilihan Hewan',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  color: darkGreen,
+                ),
+              ),
+
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SearchPage(),
+                    ),
+                  );
+                },
+                child: const Row(
+                  children: [
+                    Text(
+                      'Lihat Semua',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: primaryGreen,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: primaryGreen,
+                      size: 18,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 15),
+
+        SizedBox(
+          height: 210,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+            ),
+            scrollDirection: Axis.horizontal,
+            children: [
+              // ==========================
+              // KAMBING
+              // ==========================
+
+              _animalCard(
+                title: 'Kambing',
+                subtitle: 'Kambing pilihan',
+                image: 'Asset/image/Kambing.png',
+                price: 'Mulai Rp2,5 jt',
+              ),
+
+              const SizedBox(width: 14),
+
+              // ==========================
+              // SAPI LIMOSIN
+              // ==========================
+
+              _animalCard(
+                title: 'Sapi Limosin',
+                subtitle: 'Sapi premium',
+                image: 'Asset/image/Limosin.png',
+                price: 'Mulai Rp18 jt',
+              ),
+
+              const SizedBox(width: 14),
+
+              // ==========================
+              // DOMBA
+              // ==========================
+
+              _animalCard(
+                title: 'Domba',
+                subtitle: 'Domba sehat',
+                image: 'Asset/image/Domba.png',
+                price: 'Mulai Rp2,8 jt',
+              ),
+
+              const SizedBox(width: 14),
+
+              // ==========================
+              // SAPI BALI
+              // ==========================
+
+              _animalCard(
+                title: 'Sapi Bali',
+                subtitle: 'Sapi pilihan',
+                image: 'Asset/image/Bali.png',
+                price: 'Mulai Rp15 jt',
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ============================================================
+  // ANIMAL CARD
+  // ============================================================
+
+  Widget _animalCard({
+    required String title,
+    required String subtitle,
+    required String image,
+    required String price,
+  }) {
+    return Container(
+      width: 185,
+
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: Colors.grey.shade200,
+        ),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.035),
+            blurRadius: 12,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+
+      clipBehavior: Clip.antiAlias,
+
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // FOTO
+          Stack(
+            children: [
+              Container(
+                height: 115,
+                width: double.infinity,
+                color: const Color(0xFFF2F5F3),
+
+                child: Image.asset(
+                  image,
+                  fit: BoxFit.cover,
+
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                      child: Icon(
+                        Icons.image_not_supported_outlined,
+                        color: Colors.grey,
+                        size: 38,
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              // FAVORITE BUTTON
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  height: 30,
+                  width: 30,
+
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.92),
+                    shape: BoxShape.circle,
+                  ),
+
+                  child: const Icon(
+                    Icons.favorite_border_rounded,
+                    color: primaryGreen,
+                    size: 17,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          // INFORMASI
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              12,
+              9,
+              12,
+              10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    color: darkGreen,
+                  ),
+                ),
+
+                const SizedBox(height: 2),
+
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+                Text(
+                  price,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                    color: primaryGreen,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ============================================================
+  // TRUST BANNER
+  // ============================================================
+
+  Widget _buildTrustBanner() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+      ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 14,
+        ),
+
+        decoration: BoxDecoration(
+          color: lightGreen,
+          borderRadius: BorderRadius.circular(17),
+        ),
+
+        child: Row(
+          children: [
+            Container(
+              height: 42,
+              width: 42,
+
+              decoration: const BoxDecoration(
+                color: primaryGreen,
+                shape: BoxShape.circle,
+              ),
+
+              child: const Icon(
+                Icons.verified_rounded,
+                color: Colors.white,
+                size: 23,
+              ),
+            ),
+
+            const SizedBox(width: 13),
+
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Transparan • Sehat • Terpercaya',
+                    style: TextStyle(
+                      color: primaryGreen,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+
+                  SizedBox(height: 3),
+
+                  Text(
+                    'Hewan pilihan dengan sertifikat kesehatan',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 10,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: primaryGreen,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ============================================================
+  // BOTTOM NAVIGATION
+  // ============================================================
+
+  Widget _buildBottomNavigation() {
+    return Container(
+      height: 67,
+
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(38),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.09),
+            blurRadius: 22,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+        children: [
+          _bottomItem(
+            Icons.home_rounded,
+            'Home',
+            0,
+          ),
+
+          _bottomItem(
+            Icons.search_rounded,
+            'Search',
+            1,
+          ),
+
+          _bottomItem(
+            Icons.favorite_border_rounded,
+            'Favorit',
+            2,
+          ),
+
+          _bottomItem(
+            Icons.receipt_long_rounded,
+            'Order',
+            3,
+          ),
+
+          _bottomItem(
+            Icons.person_outline_rounded,
+            'Akun',
+            4,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ============================================================
+  // BOTTOM NAV ITEM
+  // ============================================================
+
+  Widget _bottomItem(
+    IconData icon,
+    String title,
+    int index,
+  ) {
+    bool active = selectedIndex == index;
+
     return GestureDetector(
       onTap: () {
-        if (isSelected) return;
-        Widget nextScreen;
+        if (active) return;
+
+        Widget? page;
+
         switch (index) {
-          case 0:
-            return;
           case 1:
-            nextScreen = const SearchPage();
+            page = const SearchPage();
             break;
+
           case 2:
-            nextScreen = const FavoritePage();
+            page = const FavoritePage();
             break;
+
           case 3:
-            nextScreen = const OrderPage();
+            page = const OrderPage();
             break;
+
           case 4:
-            nextScreen = const AccountPage();
+            page = const AccountPage();
             break;
-          default:
-            return;
         }
-        Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, a1, a2) => nextScreen,
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          ),
-        );
+
+        if (page != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => page!,
+            ),
+          );
+        }
       },
-      child: Container(
-        color: Colors.transparent,
-        width: 60,
+
+      child: SizedBox(
+        width: 58,
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+
           children: [
             Icon(
               icon,
-              color: isSelected ? _primaryGreen : Colors.grey.shade400,
-              size: 26,
+              color: active
+                  ? primaryGreen
+                  : Colors.grey.shade400,
+              size: 25,
             ),
+
             const SizedBox(height: 4),
+
             Text(
-              label,
+              title,
               style: TextStyle(
-                color: isSelected ? _primaryGreen : Colors.grey.shade400,
-                fontSize: 10,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                color: active
+                    ? primaryGreen
+                    : Colors.grey.shade400,
+                fontSize: 9.5,
+                fontWeight: active
+                    ? FontWeight.w800
+                    : FontWeight.w500,
               ),
             ),
           ],
