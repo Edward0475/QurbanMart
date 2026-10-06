@@ -551,16 +551,15 @@ class _HomePageState extends State<HomePage> {
           default:
             return;
         }
-        if (page != null) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => page!,
-            ),
-          );
-        }
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => nextScreen,
+          ),
+        );
       },
       child: Container(
+      
         color: Colors.transparent,
         width: 60,
         child: Column(
