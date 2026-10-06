@@ -14,7 +14,6 @@ class CartPage extends StatelessWidget {
 }
 
 // lib/MenuPage.dart
-import 'package:flutter/material.dart';
 
 class MenuPage extends StatelessWidget {
   final String restaurantName;

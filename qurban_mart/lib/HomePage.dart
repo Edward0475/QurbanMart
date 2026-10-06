@@ -810,7 +810,6 @@ class _HomePageState extends State<HomePage> {
             page = const AccountPage();
             break;
         }
-
         if (page != null) {
           Navigator.pushReplacement(
             context,
