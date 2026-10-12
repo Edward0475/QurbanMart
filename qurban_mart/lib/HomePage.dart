@@ -1,9 +1,11 @@
+
 import 'package:flutter/material.dart';
 
 import 'AccountPage.dart';
 import 'OrderPage.dart';
 import 'Favorite.dart';
 import 'SearchPage.dart';
+import 'NotificationPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   final Color _primaryGreen = const Color(0xFF1B5E20);
   final int _selectedIndex = 0;
 
-  // Data Dummy untuk Daftar Peternak Terfavorit
+  // Data dummy peternak
   final List<Map<String, dynamic>> _peternakList = [
     {
       'name': 'Sumber Rezeki Farm',
@@ -41,21 +43,42 @@ class _HomePageState extends State<HomePage> {
     },
   ];
 
+  // Navigasi dengan transisi tanpa animasi
+  void _navigateTo(Widget page) {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionDuration: Duration.zero,
+      ),
+    );
+  }
+
+  // Membuka halaman notifikasi tanpa mengganti halaman Home
+  void _openNotifications() {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const NotificationPage(),
+        transitionDuration: Duration.zero,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
       body: Stack(
         children: [
-          // --- KONTEN UTAMA ---
+          // KONTEN UTAMA
           SingleChildScrollView(
-            padding: const EdgeInsets.only(
-              bottom: 120,
-            ), // Jarak aman dari navbar bawah
+            padding: const EdgeInsets.only(bottom: 120),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // --- 1. HEADER ---
+                // 1. HEADER
                 Container(
                   padding: const EdgeInsets.only(
                     top: 60,
@@ -69,7 +92,10 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Row(
                         children: [
-                          Image.asset('Asset/image/QurbanMart.png', height: 40),
+                          Image.asset(
+                            'Asset/image/QurbanMart.png',
+                            height: 40,
+                          ),
                           const SizedBox(width: 8),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,56 +119,51 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
+
+                      // IKON NOTIFIKASI
                       IconButton(
                         icon: const Icon(
                           Icons.notifications_none,
                           color: Colors.black87,
                           size: 28,
                         ),
-                        onPressed: () {},
+                        onPressed: _openNotifications,
+                        tooltip: 'Notifikasi',
                       ),
                     ],
                   ),
                 ),
 
-                // --- 2. BANNER (Menggunakan QA.png) ---
+                // 2. BANNER
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0,
-                    vertical: 16.0,
+                    horizontal: 24,
+                    vertical: 16,
                   ),
                   child: _buildAestheticBanner(
                     'Asset/image/Bannersapi.png',
-                  ), // <-- Banner diubah ke QA.png
+                  ),
                 ),
 
-                // --- 3. SEARCH BAR ---
+                // 3. SEARCH BAR
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0,
-                    vertical: 8.0,
+                    horizontal: 24,
+                    vertical: 8,
                   ),
                   child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (
-                            context,
-                            animation,
-                            secondaryAnimation,
-                          ) => const SearchPage(),
-                          transitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
+                    onTap: () => _navigateTo(const SearchPage()),
                     child: Container(
                       height: 55,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: Colors.grey.shade300),
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.05),
@@ -174,9 +195,9 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 20),
 
-                // --- 4. KATEGORI KURBAN ---
+                // 4. KATEGORI KURBAN
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
                     'Kategori Kurban',
                     style: TextStyle(
@@ -188,16 +209,22 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 16),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildCategoryItem('Asset/image/logoSapi.png', 'Sapi'),
+                      _buildCategoryItem(
+                        'Asset/image/logoSapi.png',
+                        'Sapi',
+                      ),
                       _buildCategoryItem(
                         'Asset/image/logoKambing.png',
                         'Kambing',
                       ),
-                      _buildCategoryItem('Asset/image/logoDomba.png', 'Domba'),
+                      _buildCategoryItem(
+                        'Asset/image/logoDomba.png',
+                        'Domba',
+                      ),
                       _buildCategoryItem(
                         'Asset/image/logoSapi.png',
                         'Patungan\nSapi 1/7',
@@ -208,9 +235,9 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 30),
 
-                // --- 5. KATEGORI AQIQAH ---
+                // 5. KATEGORI AQIQAH
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -235,7 +262,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 16),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
                     children: [
                       Expanded(
@@ -257,9 +284,9 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 30),
 
-                // --- 6. PETERNAK TERFAVORIT ---
+                // 6. PETERNAK TERFAVORIT
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -284,7 +311,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 16),
                 ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: _peternakList.length,
@@ -296,7 +323,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // --- BOTTOM NAVIGATION BAR ---
+          // BOTTOM NAVIGATION
           Positioned(
             bottom: 30,
             left: 20,
@@ -318,10 +345,26 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildBottomNavItem(Icons.home, 'Home', 0),
-                  _buildBottomNavItem(Icons.search_outlined, 'Search', 1),
-                  _buildBottomNavItem(Icons.favorite_border, 'Favorit', 2),
-                  _buildBottomNavItem(Icons.receipt_long, 'Order', 3),
-                  _buildBottomNavItem(Icons.person_outline, 'Akun', 4),
+                  _buildBottomNavItem(
+                    Icons.search_outlined,
+                    'Search',
+                    1,
+                  ),
+                  _buildBottomNavItem(
+                    Icons.favorite_border,
+                    'Favorit',
+                    2,
+                  ),
+                  _buildBottomNavItem(
+                    Icons.receipt_long,
+                    'Order',
+                    3,
+                  ),
+                  _buildBottomNavItem(
+                    Icons.person_outline,
+                    'Akun',
+                    4,
+                  ),
                 ],
               ),
             ),
@@ -331,37 +374,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // --- WIDGET KUSTOM ---
-
-  // Pembaruan Banner
+  // WIDGET BANNER
   Widget _buildAestheticBanner(String imagePath) {
-    return Container(
-      width: double.infinity,
-      // Menggunakan AspectRatio agar tinggi banner proporsional dengan lebarnya
-      // dan tidak merusak/terpotong (crop) secara acak.
-      child: AspectRatio(
-        aspectRatio: 16 / 7, // Sesuaikan rasio ini jika gambar QA.png lebih tinggi/lebar (contoh: 2/1 atau 16/9)
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: _primaryGreen,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 15,
-                offset: const Offset(0, 5),
-              ),
-            ],
-            image: DecorationImage(
-              image: AssetImage(imagePath),
-              fit: BoxFit.cover, // Gambar akan mengisi kontainer dengan rapi
+    return AspectRatio(
+      aspectRatio: 16 / 7,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: _primaryGreen,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
             ),
+          ],
+          image: DecorationImage(
+            image: AssetImage(imagePath),
+            fit: BoxFit.cover,
           ),
         ),
       ),
     );
   }
 
+  // WIDGET KATEGORI KURBAN
   Widget _buildCategoryItem(String imagePath, String title) {
     return Column(
       children: [
@@ -374,7 +411,10 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Colors.grey.shade200),
           ),
-          child: Image.asset(imagePath, fit: BoxFit.contain),
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.contain,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
@@ -390,6 +430,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // WIDGET KARTU AQIQAH
   Widget _buildAqiqahCard(String imagePath, String title) {
     return Container(
       decoration: BoxDecoration(
@@ -420,10 +461,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12),
             child: Text(
               title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
             ),
           ),
         ],
@@ -431,6 +475,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // WIDGET KARTU PETERNAK
   Widget _buildPeternakCard(Map<String, dynamic> peternak) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -474,7 +519,11 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 6),
                 Row(
                   children: [
-                    const Icon(Icons.star, color: Colors.amber, size: 16),
+                    const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                      size: 16,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       peternak['rating'],
@@ -484,11 +533,14 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     const SizedBox(width: 4),
-                    Text(
-                      '(${peternak['reviews']})',
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 12,
+                    Flexible(
+                      child: Text(
+                        '(${peternak['reviews']})',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ],
@@ -502,11 +554,14 @@ class _HomePageState extends State<HomePage> {
                       size: 14,
                     ),
                     const SizedBox(width: 4),
-                    Text(
-                      peternak['location'],
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 12,
+                    Expanded(
+                      child: Text(
+                        peternak['location'],
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ],
@@ -520,46 +575,47 @@ class _HomePageState extends State<HomePage> {
               color: const Color(0xFFF1F8F1),
               borderRadius: BorderRadius.circular(50),
             ),
-            child: Icon(Icons.favorite_border, color: _primaryGreen, size: 20),
+            child: Icon(
+              Icons.favorite_border,
+              color: _primaryGreen,
+              size: 20,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildBottomNavItem(IconData icon, String label, int index) {
-    bool isSelected = _selectedIndex == index;
+  // NAVIGASI BAWAH
+  Widget _buildBottomNavItem(
+    IconData icon,
+    String label,
+    int index,
+  ) {
+    final bool isSelected = _selectedIndex == index;
+
     return GestureDetector(
       onTap: () {
         if (isSelected) return;
-        Widget nextScreen;
+
         switch (index) {
           case 0:
             return;
           case 1:
-            nextScreen = const SearchPage();
+            _navigateTo(const SearchPage());
             break;
           case 2:
-            nextScreen = const FavoritePage();
+            _navigateTo(const FavoritePage());
             break;
           case 3:
-            nextScreen = const OrderPage();
+            _navigateTo(const OrderPage());
             break;
           case 4:
-            nextScreen = const AccountPage();
+            _navigateTo(const AccountPage());
             break;
-          default:
-            return;
         }
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => nextScreen,
-          ),
-        );
       },
       child: Container(
-      
         color: Colors.transparent,
         width: 60,
         child: Column(
@@ -567,16 +623,22 @@ class _HomePageState extends State<HomePage> {
           children: [
             Icon(
               icon,
-              color: isSelected ? _primaryGreen : Colors.grey.shade400,
+              color: isSelected
+                  ? _primaryGreen
+                  : Colors.grey.shade400,
               size: 26,
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? _primaryGreen : Colors.grey.shade400,
+                color: isSelected
+                    ? _primaryGreen
+                    : Colors.grey.shade400,
                 fontSize: 10,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                fontWeight: isSelected
+                    ? FontWeight.bold
+                    : FontWeight.w500,
               ),
             ),
           ],
