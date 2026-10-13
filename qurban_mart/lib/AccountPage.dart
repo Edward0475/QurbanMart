@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'HomePage.dart'; // Sesuaikan jika Anda menggunakan home_page.dart
+import 'HomePage.dart';
 import 'SearchPage.dart';
-import 'Favorite.dart';
+import 'Favorite.dart'; // Sesuaikan jika nama file Anda FavoritePage.dart
 import 'OrderPage.dart';
+import 'SaldoQurbanPage.dart'; // <-- Ini kunci untuk mengatasi error Anda
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -72,14 +73,38 @@ class _AccountPageState extends State<AccountPage> {
                             Icons.account_balance_wallet_outlined,
                             'Saldo qurban',
                             trailingText: '0 Poin',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SaldoQurbanPage(),
+                                ),
+                              );
+                            },
                           ),
                           _buildMenuItem(
                             Icons.receipt_long_outlined,
                             'Riwayat Pesanan',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const OrderPage(),
+                                ),
+                              );
+                            },
                           ),
                           _buildMenuItem(
                             Icons.favorite_border_rounded,
                             'Hewan Favorit',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const FavoritePage(),
+                                ),
+                              );
+                            },
                           ),
                         ]),
                         const SizedBox(height: 24),
@@ -95,16 +120,26 @@ class _AccountPageState extends State<AccountPage> {
                         ),
                         const SizedBox(height: 12),
                         _buildMenuSection([
-                          _buildMenuItem(Icons.person_outline, 'Edit Profil'),
+                          _buildMenuItem(
+                            Icons.person_outline,
+                            'Edit Profil',
+                            onTap: () {},
+                          ),
                           _buildMenuItem(
                             Icons.location_on_outlined,
                             'Alamat Tersimpan',
+                            onTap: () {},
                           ),
                           _buildMenuItem(
                             Icons.shield_outlined,
                             'Keamanan & Kata Sandi',
+                            onTap: () {},
                           ),
-                          _buildMenuItem(Icons.help_outline, 'Pusat Bantuan'),
+                          _buildMenuItem(
+                            Icons.help_outline,
+                            'Pusat Bantuan',
+                            onTap: () {},
+                          ),
                         ]),
                         const SizedBox(height: 24),
 
@@ -114,6 +149,7 @@ class _AccountPageState extends State<AccountPage> {
                             Icons.logout,
                             'Keluar',
                             isLogout: true,
+                            onTap: () {},
                           ),
                         ]),
                       ],
@@ -250,12 +286,13 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  // Baris Menu Individual
+  // Baris Menu Individual (Ditambahkan parameter onTap)
   Widget _buildMenuItem(
     IconData icon,
     String title, {
     bool isLogout = false,
     String? trailingText,
+    VoidCallback? onTap,
   }) {
     return ListTile(
       leading: Container(
@@ -288,9 +325,7 @@ class _AccountPageState extends State<AccountPage> {
             )
           : const Icon(Icons.chevron_right, size: 20, color: Colors.grey),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      onTap: () {
-        // Aksi ketika menu ditekan
-      },
+      onTap: onTap, // Menjalankan fungsi klik
     );
   }
 
