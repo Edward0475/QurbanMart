@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'AnimalPageDetail.dart';
 
 import 'HomePage.dart'; // Sesuaikan jika Anda menggunakan home_page.dart
 import 'Favorite.dart'; // Sesuaikan dengan nama file Anda
@@ -461,6 +462,7 @@ class _SearchPageState extends State<SearchPage> {
   // ============================================================
   // ANIMAL CARD
   // ============================================================
+<<<<<<< HEAD
   Widget _buildAnimalCard(Map<String, dynamic> animal) {
     return Container(
       width: double.infinity,
@@ -474,24 +476,53 @@ class _SearchPageState extends State<SearchPage> {
             color: Colors.black.withOpacity(0.035),
             blurRadius: 8,
             offset: const Offset(0, 2),
+=======
+
+  
+Widget _buildAnimalCard(Map<String, dynamic> animal) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AnimalDetailPage(
+                animal: animal,
+              ),
+            ),
+          );
+        },
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color: const Color(0xFFE9E9E9),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.035),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+>>>>>>> 18231e1 (Update Search and Animal Detail pages)
           ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // FOTO
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              animal['image'],
-              width: 92,
-              height: 92,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // FOTO HEWAN
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  animal['image'] ?? '',
                   width: 92,
                   height: 92,
+<<<<<<< HEAD
                   color: const Color(0xFFEFEFEF),
                   child: const Icon(
                     Icons.image_not_supported_outlined,
@@ -525,10 +556,22 @@ class _SearchPageState extends State<SearchPage> {
                         color: animal['favorite'] == true
                             ? const Color(0xFFE53935)
                             : const Color(0xFF777777),
+=======
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 92,
+                      height: 92,
+                      color: const Color(0xFFEFEFEF),
+                      child: const Icon(
+                        Icons.image_not_supported_outlined,
+                        color: Colors.grey,
+>>>>>>> 18231e1 (Update Search and Animal Detail pages)
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
+<<<<<<< HEAD
                 const SizedBox(height: 5),
                 Text(
                   animal['name'],
@@ -589,11 +632,138 @@ class _SearchPageState extends State<SearchPage> {
                         style: const TextStyle(
                           fontSize: 11,
                           color: Color(0xFF777777),
+=======
+              ),
+
+              const SizedBox(width: 11),
+
+              // INFORMASI HEWAN
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        _verifiedBadge(),
+                        const Spacer(),
+
+                        // TOMBOL FAVORIT
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              animal['favorite'] =
+                                  !(animal['favorite'] ?? false);
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(3),
+                            child: Icon(
+                              animal['favorite'] == true
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              size: 22,
+                              color: animal['favorite'] == true
+                                  ? const Color(0xFFE53935)
+                                  : const Color(0xFF777777),
+                            ),
+                          ),
+>>>>>>> 18231e1 (Update Search and Animal Detail pages)
                         ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 5),
+
+                    // NAMA HEWAN
+                    Text(
+                      animal['name'] ?? 'Hewan Qurban',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF222222),
+                      ),
+                    ),
+
+                    const SizedBox(height: 5),
+
+                    // BERAT DAN USIA
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.scale_outlined,
+                          size: 14,
+                          color: Color(0xFF858585),
+                        ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            animal['weight'] ?? '-',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Color(0xFF777777),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        const Icon(
+                          Icons.access_time,
+                          size: 14,
+                          color: Color(0xFF858585),
+                        ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            animal['age'] ?? '-',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Color(0xFF777777),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    // LOKASI
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on_outlined,
+                          size: 14,
+                          color: Color(0xFF858585),
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            animal['location'] ?? '-',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Color(0xFF777777),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 5),
+
+                    // HARGA
+                    Text(
+                      animal['price'] ?? '-',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF079447),
                       ),
                     ),
                   ],
                 ),
+<<<<<<< HEAD
                 const SizedBox(height: 5),
                 Text(
                   animal['price'],
@@ -605,8 +775,12 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ],
             ),
+=======
+              ),
+            ],
+>>>>>>> 18231e1 (Update Search and Animal Detail pages)
           ),
-        ],
+        ),
       ),
     );
   }
