@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 
+import 'HomePage.dart'; // Sesuaikan jika Anda menggunakan home_page.dart
+import 'Favorite.dart'; // Sesuaikan dengan nama file Anda
+import 'OrderPage.dart'; // Sesuaikan dengan nama file Anda
+import 'AccountPage.dart'; // Sesuaikan dengan nama file Anda
+
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
-
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-
   String _selectedCategory = 'Semua';
 
-  final List<String> _categories = [
-    'Semua',
-    'Sapi',
-    'Kambing',
-    'Domba',
-  ];
+  // Warna Utama agar konsisten dengan HomePage & OrderPage
+  static const Color _primaryGreen = Color(0xFF1B5E20);
+  final int _selectedIndex = 1; // Index 1 Aktif untuk halaman Search/Jelajahi
+
+  final List<String> _categories = ['Semua', 'Sapi', 'Kambing', 'Domba'];
 
   final List<Map<String, dynamic>> _animals = [
     {
@@ -80,16 +82,15 @@ class _SearchPageState extends State<SearchPage> {
 
   List<Map<String, dynamic>> get _filteredAnimals {
     final search = _searchController.text.toLowerCase().trim();
-
     return _animals.where((animal) {
-      final matchesCategory = _selectedCategory == 'Semua' ||
+      final matchesCategory =
+          _selectedCategory == 'Semua' ||
           animal['category'] == _selectedCategory;
-
-      final matchesSearch = search.isEmpty ||
+      final matchesSearch =
+          search.isEmpty ||
           animal['name'].toString().toLowerCase().contains(search) ||
           animal['category'].toString().toLowerCase().contains(search) ||
           animal['location'].toString().toLowerCase().contains(search);
-
       return matchesCategory && matchesSearch;
     }).toList();
   }
@@ -99,24 +100,65 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9F7),
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            _buildHeader(),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            // --- KONTEN UTAMA ---
+            Column(
+              children: [
+                _buildHeader(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    // Padding bawah ditambahkan agar list tidak tertutup bottom nav
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildSearchBar(),
+                        const SizedBox(height: 14),
+                        _buildCategoryFilter(),
+                        const SizedBox(height: 12),
+                        _buildAdditionalFilters(),
+                        const SizedBox(height: 18),
+                        _buildResultHeader(),
+                        const SizedBox(height: 10),
+                        _buildAnimalList(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            // --- BOTTOM NAVIGATION BAR MENGAMBANG (KONSISTEN) ---
+            Positioned(
+              bottom: 30,
+              left: 20,
+              right: 20,
+              child: Container(
+                height: 65,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(40),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildSearchBar(),
-                    const SizedBox(height: 14),
-                    _buildCategoryFilter(),
-                    const SizedBox(height: 12),
-                    _buildAdditionalFilters(),
-                    const SizedBox(height: 18),
-                    _buildResultHeader(),
-                    const SizedBox(height: 10),
-                    _buildAnimalList(),
+                    _buildBottomNavItem(Icons.home_outlined, 'Home', 0),
+                    _buildBottomNavItem(
+                      Icons.search_outlined,
+                      'Search',
+                      1,
+                    ), // Aktif
+                    _buildBottomNavItem(Icons.favorite_border, 'Favorit', 2),
+                    _buildBottomNavItem(Icons.receipt_long, 'Order', 3),
+                    _buildBottomNavItem(Icons.person_outline, 'Akun', 4),
                   ],
                 ),
               ),
@@ -130,14 +172,25 @@ class _SearchPageState extends State<SearchPage> {
   // ============================================================
   // HEADER
   // ============================================================
-
   Widget _buildHeader() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       child: Row(
         children: [
           InkWell(
-            onTap: () => Navigator.pop(context),
+            // --- BAGIAN YANG DIUBAH ---
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const HomePage(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            },
+            // --------------------------
             borderRadius: BorderRadius.circular(20),
             child: const Padding(
               padding: EdgeInsets.all(4),
@@ -164,11 +217,7 @@ class _SearchPageState extends State<SearchPage> {
             borderRadius: BorderRadius.circular(20),
             child: const Padding(
               padding: EdgeInsets.all(4),
-              child: Icon(
-                Icons.tune,
-                size: 24,
-                color: Color(0xFF222222),
-              ),
+              child: Icon(Icons.tune, size: 24, color: Color(0xFF222222)),
             ),
           ),
         ],
@@ -179,16 +228,13 @@ class _SearchPageState extends State<SearchPage> {
   // ============================================================
   // SEARCH BAR
   // ============================================================
-
   Widget _buildSearchBar() {
     return Container(
       height: 50,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: const Color(0xFFE8E8E8),
-        ),
+        border: Border.all(color: const Color(0xFFE8E8E8)),
       ),
       child: TextField(
         controller: _searchController,
@@ -197,10 +243,7 @@ class _SearchPageState extends State<SearchPage> {
         },
         decoration: InputDecoration(
           hintText: 'Cari hewan, lokasi, atau penjual...',
-          hintStyle: const TextStyle(
-            color: Color(0xFF999999),
-            fontSize: 13,
-          ),
+          hintStyle: const TextStyle(color: Color(0xFF999999), fontSize: 13),
           prefixIcon: const Icon(
             Icons.search,
             color: Color(0xFF8D8D8D),
@@ -232,7 +275,6 @@ class _SearchPageState extends State<SearchPage> {
   // ============================================================
   // CATEGORY FILTER
   // ============================================================
-
   Widget _buildCategoryFilter() {
     return SizedBox(
       height: 42,
@@ -243,7 +285,6 @@ class _SearchPageState extends State<SearchPage> {
         itemBuilder: (context, index) {
           final category = _categories[index];
           final selected = category == _selectedCategory;
-
           return GestureDetector(
             onTap: () {
               setState(() {
@@ -254,25 +295,18 @@ class _SearchPageState extends State<SearchPage> {
               padding: const EdgeInsets.symmetric(horizontal: 17),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: selected
-                    ? const Color(0xFF079447)
-                    : Colors.white,
+                color: selected ? _primaryGreen : Colors.white,
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(
-                  color: selected
-                      ? const Color(0xFF079447)
-                      : const Color(0xFFE8E8E8),
+                  color: selected ? _primaryGreen : const Color(0xFFE8E8E8),
                 ),
               ),
               child: Text(
                 category,
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight:
-                      selected ? FontWeight.w600 : FontWeight.w500,
-                  color: selected
-                      ? Colors.white
-                      : const Color(0xFF444444),
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                  color: selected ? Colors.white : const Color(0xFF444444),
                 ),
               ),
             ),
@@ -285,7 +319,6 @@ class _SearchPageState extends State<SearchPage> {
   // ============================================================
   // ADDITIONAL FILTERS
   // ============================================================
-
   Widget _buildAdditionalFilters() {
     return Row(
       children: [
@@ -345,18 +378,12 @@ class _SearchPageState extends State<SearchPage> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: const Color(0xFFE8E8E8),
-          ),
+          border: Border.all(color: const Color(0xFFE8E8E8)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 15,
-              color: const Color(0xFF555555),
-            ),
+            Icon(icon, size: 15, color: const Color(0xFF555555)),
             const SizedBox(width: 5),
             Text(
               title,
@@ -375,7 +402,6 @@ class _SearchPageState extends State<SearchPage> {
   // ============================================================
   // RESULT HEADER
   // ============================================================
-
   Widget _buildResultHeader() {
     return Row(
       children: [
@@ -390,10 +416,7 @@ class _SearchPageState extends State<SearchPage> {
         const Spacer(),
         Text(
           '${_filteredAnimals.length} hewan',
-          style: const TextStyle(
-            fontSize: 12,
-            color: Color(0xFF888888),
-          ),
+          style: const TextStyle(fontSize: 12, color: Color(0xFF888888)),
         ),
       ],
     );
@@ -402,44 +425,29 @@ class _SearchPageState extends State<SearchPage> {
   // ============================================================
   // ANIMAL LIST
   // ============================================================
-
   Widget _buildAnimalList() {
     if (_filteredAnimals.isEmpty) {
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 50,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
         child: Column(
           children: [
-            Icon(
-              Icons.search_off,
-              size: 50,
-              color: Colors.grey.shade400,
-            ),
+            Icon(Icons.search_off, size: 50, color: Colors.grey.shade400),
             const SizedBox(height: 12),
             const Text(
               'Hewan tidak ditemukan',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 5),
             const Text(
               'Coba gunakan kata kunci atau kategori lain.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                color: Color(0xFF888888),
-              ),
+              style: TextStyle(fontSize: 12, color: Color(0xFF888888)),
             ),
           ],
         ),
       );
     }
-
     return Column(
       children: _filteredAnimals.map((animal) {
         return Padding(
@@ -453,7 +461,6 @@ class _SearchPageState extends State<SearchPage> {
   // ============================================================
   // ANIMAL CARD
   // ============================================================
-
   Widget _buildAnimalCard(Map<String, dynamic> animal) {
     return Container(
       width: double.infinity,
@@ -461,9 +468,7 @@ class _SearchPageState extends State<SearchPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: const Color(0xFFE9E9E9),
-        ),
+        border: Border.all(color: const Color(0xFFE9E9E9)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.035),
@@ -496,9 +501,7 @@ class _SearchPageState extends State<SearchPage> {
               },
             ),
           ),
-
           const SizedBox(width: 11),
-
           // DETAIL
           Expanded(
             child: Column(
@@ -511,8 +514,7 @@ class _SearchPageState extends State<SearchPage> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          animal['favorite'] =
-                              !(animal['favorite'] ?? false);
+                          animal['favorite'] = !(animal['favorite'] ?? false);
                         });
                       },
                       child: Icon(
@@ -527,9 +529,7 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 5),
-
                 Text(
                   animal['name'],
                   maxLines: 1,
@@ -540,9 +540,7 @@ class _SearchPageState extends State<SearchPage> {
                     color: Color(0xFF222222),
                   ),
                 ),
-
                 const SizedBox(height: 5),
-
                 Row(
                   children: [
                     const Icon(
@@ -574,9 +572,7 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 4),
-
                 Row(
                   children: [
                     const Icon(
@@ -598,15 +594,13 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 5),
-
                 Text(
                   animal['price'],
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF079447),
+                    color: _primaryGreen,
                   ),
                 ),
               ],
@@ -620,13 +614,9 @@ class _SearchPageState extends State<SearchPage> {
   // ============================================================
   // VERIFIED BADGE
   // ============================================================
-
   Widget _verifiedBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 7,
-        vertical: 3,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
         color: const Color(0xFFE4F7EE),
         borderRadius: BorderRadius.circular(6),
@@ -634,18 +624,14 @@ class _SearchPageState extends State<SearchPage> {
       child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.verified,
-            size: 13,
-            color: Color(0xFF079447),
-          ),
+          Icon(Icons.verified, size: 13, color: _primaryGreen),
           SizedBox(width: 3),
           Text(
             'Terverifikasi',
             style: TextStyle(
               fontSize: 9,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF079447),
+              color: _primaryGreen,
             ),
           ),
         ],
@@ -656,15 +642,12 @@ class _SearchPageState extends State<SearchPage> {
   // ============================================================
   // FILTER BOTTOM SHEET
   // ============================================================
-
   void _showFilterSheet() {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(22),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
       builder: (context) {
         return Padding(
@@ -677,10 +660,7 @@ class _SearchPageState extends State<SearchPage> {
                 children: [
                   const Text(
                     'Filter Hewan',
-                    style: TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
                   ),
                   const Spacer(),
                   IconButton(
@@ -689,34 +669,23 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 15),
-
               const Text(
                 'Kategori',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               ),
-
               const SizedBox(height: 10),
-
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: _categories.map((category) {
-                  final selected =
-                      _selectedCategory == category;
-
+                  final selected = _selectedCategory == category;
                   return ChoiceChip(
                     label: Text(category),
                     selected: selected,
-                    selectedColor: const Color(0xFF079447),
+                    selectedColor: _primaryGreen,
                     labelStyle: TextStyle(
-                      color: selected
-                          ? Colors.white
-                          : Colors.black87,
+                      color: selected ? Colors.white : Colors.black87,
                     ),
                     onSelected: (_) {
                       setState(() {
@@ -727,9 +696,7 @@ class _SearchPageState extends State<SearchPage> {
                   );
                 }).toList(),
               ),
-
               const SizedBox(height: 20),
-
               SizedBox(
                 width: double.infinity,
                 height: 48,
@@ -738,7 +705,7 @@ class _SearchPageState extends State<SearchPage> {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF079447),
+                    backgroundColor: _primaryGreen,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -747,9 +714,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   child: const Text(
                     'Terapkan Filter',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -763,19 +728,15 @@ class _SearchPageState extends State<SearchPage> {
   // ============================================================
   // SIMPLE FILTER
   // ============================================================
-
   void _showSimpleFilter(String filterName) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(22),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
       builder: (context) {
         List<String> options;
-
         switch (filterName) {
           case 'Lokasi':
             options = [
@@ -785,7 +746,6 @@ class _SearchPageState extends State<SearchPage> {
               'DI Yogyakarta',
             ];
             break;
-
           case 'Harga':
             options = [
               'Semua Harga',
@@ -795,7 +755,6 @@ class _SearchPageState extends State<SearchPage> {
               'Di atas Rp 30 juta',
             ];
             break;
-
           case 'Berat':
             options = [
               'Semua Berat',
@@ -805,7 +764,6 @@ class _SearchPageState extends State<SearchPage> {
               'Di atas 300 kg',
             ];
             break;
-
           default:
             options = [
               'Semua Usia',
@@ -815,7 +773,6 @@ class _SearchPageState extends State<SearchPage> {
               'Di atas 3 tahun',
             ];
         }
-
         return Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
           child: Column(
@@ -829,22 +786,12 @@ class _SearchPageState extends State<SearchPage> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-
               const SizedBox(height: 15),
-
               ...options.map(
                 (option) => ListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    option,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                    color: Colors.grey,
-                  ),
+                  title: Text(option, style: const TextStyle(fontSize: 14)),
+                  trailing: const Icon(Icons.chevron_right, color: Colors.grey),
                   onTap: () {
                     Navigator.pop(context);
                   },
@@ -854,6 +801,68 @@ class _SearchPageState extends State<SearchPage> {
           ),
         );
       },
+    );
+  }
+
+  // ============================================================
+  // NAVIGATION BOTTOM NAV
+  // ============================================================
+  Widget _buildBottomNavItem(IconData icon, String label, int index) {
+    bool isSelected = _selectedIndex == index;
+    return GestureDetector(
+      onTap: () {
+        if (isSelected) return;
+        Widget nextScreen;
+        switch (index) {
+          case 0:
+            nextScreen = const HomePage();
+            break;
+          case 1:
+            return; // Sudah di halaman Search
+          case 2:
+            nextScreen = const FavoritePage();
+            break;
+          case 3:
+            nextScreen = const OrderPage();
+            break;
+          case 4:
+            nextScreen = const AccountPage();
+            break;
+          default:
+            return;
+        }
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+        );
+      },
+      child: Container(
+        color: Colors.transparent,
+        width: 60,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? _primaryGreen : Colors.grey.shade400,
+              size: 26,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? _primaryGreen : Colors.grey.shade400,
+                fontSize: 10,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
