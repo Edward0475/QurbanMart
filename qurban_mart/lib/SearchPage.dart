@@ -1,26 +1,34 @@
-import 'package:flutter/material.dart';
-import 'AnimalPageDetail.dart';
 
-import 'HomePage.dart'; // Sesuaikan jika Anda menggunakan home_page.dart
-import 'Favorite.dart'; // Sesuaikan dengan nama file Anda
-import 'OrderPage.dart'; // Sesuaikan dengan nama file Anda
-import 'AccountPage.dart'; // Sesuaikan dengan nama file Anda
+import 'package:flutter/material.dart';
+
+import 'AnimalPageDetail.dart';
+import 'HomePage.dart';
+import 'Favorite.dart';
+import 'OrderPage.dart';
+import 'AccountPage.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
+
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController =
+      TextEditingController();
+
+  static const Color _primaryGreen = Color(0xFF1B5E20);
+
+  final int _selectedIndex = 1;
   String _selectedCategory = 'Semua';
 
-  // Warna Utama agar konsisten dengan HomePage & OrderPage
-  static const Color _primaryGreen = Color(0xFF1B5E20);
-  final int _selectedIndex = 1; // Index 1 Aktif untuk halaman Search/Jelajahi
-
-  final List<String> _categories = ['Semua', 'Sapi', 'Kambing', 'Domba'];
+  final List<String> _categories = [
+    'Semua',
+    'Sapi',
+    'Kambing',
+    'Domba',
+  ];
 
   final List<Map<String, dynamic>> _animals = [
     {
@@ -82,16 +90,17 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   List<Map<String, dynamic>> get _filteredAnimals {
-    final search = _searchController.text.toLowerCase().trim();
+    final query = _searchController.text.toLowerCase().trim();
+
     return _animals.where((animal) {
-      final matchesCategory =
-          _selectedCategory == 'Semua' ||
+      final matchesCategory = _selectedCategory == 'Semua' ||
           animal['category'] == _selectedCategory;
-      final matchesSearch =
-          search.isEmpty ||
-          animal['name'].toString().toLowerCase().contains(search) ||
-          animal['category'].toString().toLowerCase().contains(search) ||
-          animal['location'].toString().toLowerCase().contains(search);
+
+      final matchesSearch = query.isEmpty ||
+          animal['name'].toString().toLowerCase().contains(query) ||
+          animal['category'].toString().toLowerCase().contains(query) ||
+          animal['location'].toString().toLowerCase().contains(query);
+
       return matchesCategory && matchesSearch;
     }).toList();
   }
@@ -103,13 +112,11 @@ class _SearchPageState extends State<SearchPage> {
       body: SafeArea(
         child: Stack(
           children: [
-            // --- KONTEN UTAMA ---
             Column(
               children: [
                 _buildHeader(),
                 Expanded(
                   child: SingleChildScrollView(
-                    // Padding bawah ditambahkan agar list tidak tertutup bottom nav
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,8 +136,6 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ],
             ),
-
-            // --- BOTTOM NAVIGATION BAR MENGAMBANG (KONSISTEN) ---
             Positioned(
               bottom: 30,
               left: 20,
@@ -152,11 +157,7 @@ class _SearchPageState extends State<SearchPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildBottomNavItem(Icons.home_outlined, 'Home', 0),
-                    _buildBottomNavItem(
-                      Icons.search_outlined,
-                      'Search',
-                      1,
-                    ), // Aktif
+                    _buildBottomNavItem(Icons.search_outlined, 'Search', 1),
                     _buildBottomNavItem(Icons.favorite_border, 'Favorit', 2),
                     _buildBottomNavItem(Icons.receipt_long, 'Order', 3),
                     _buildBottomNavItem(Icons.person_outline, 'Akun', 4),
@@ -170,28 +171,20 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  // ============================================================
-  // HEADER
-  // ============================================================
   Widget _buildHeader() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       child: Row(
         children: [
           InkWell(
-            // --- BAGIAN YANG DIUBAH ---
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      const HomePage(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
+                MaterialPageRoute(
+                  builder: (_) => const HomePage(),
                 ),
               );
             },
-            // --------------------------
             borderRadius: BorderRadius.circular(20),
             child: const Padding(
               padding: EdgeInsets.all(4),
@@ -218,7 +211,11 @@ class _SearchPageState extends State<SearchPage> {
             borderRadius: BorderRadius.circular(20),
             child: const Padding(
               padding: EdgeInsets.all(4),
-              child: Icon(Icons.tune, size: 24, color: Color(0xFF222222)),
+              child: Icon(
+                Icons.tune,
+                size: 24,
+                color: Color(0xFF222222),
+              ),
             ),
           ),
         ],
@@ -226,9 +223,6 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  // ============================================================
-  // SEARCH BAR
-  // ============================================================
   Widget _buildSearchBar() {
     return Container(
       height: 50,
@@ -239,12 +233,13 @@ class _SearchPageState extends State<SearchPage> {
       ),
       child: TextField(
         controller: _searchController,
-        onChanged: (_) {
-          setState(() {});
-        },
+        onChanged: (_) => setState(() {}),
         decoration: InputDecoration(
           hintText: 'Cari hewan, lokasi, atau penjual...',
-          hintStyle: const TextStyle(color: Color(0xFF999999), fontSize: 13),
+          hintStyle: const TextStyle(
+            color: Color(0xFF999999),
+            fontSize: 13,
+          ),
           prefixIcon: const Icon(
             Icons.search,
             color: Color(0xFF8D8D8D),
@@ -252,11 +247,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
           suffixIcon: _searchController.text.isNotEmpty
               ? IconButton(
-                  icon: const Icon(
-                    Icons.close,
-                    size: 19,
-                    color: Color(0xFF888888),
-                  ),
+                  icon: const Icon(Icons.close, size: 19),
                   onPressed: () {
                     _searchController.clear();
                     setState(() {});
@@ -273,9 +264,6 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  // ============================================================
-  // CATEGORY FILTER
-  // ============================================================
   Widget _buildCategoryFilter() {
     return SizedBox(
       height: 42,
@@ -286,6 +274,7 @@ class _SearchPageState extends State<SearchPage> {
         itemBuilder: (context, index) {
           final category = _categories[index];
           final selected = category == _selectedCategory;
+
           return GestureDetector(
             onTap: () {
               setState(() {
@@ -299,15 +288,20 @@ class _SearchPageState extends State<SearchPage> {
                 color: selected ? _primaryGreen : Colors.white,
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(
-                  color: selected ? _primaryGreen : const Color(0xFFE8E8E8),
+                  color: selected
+                      ? _primaryGreen
+                      : const Color(0xFFE8E8E8),
                 ),
               ),
               child: Text(
                 category,
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                  color: selected ? Colors.white : const Color(0xFF444444),
+                  fontWeight:
+                      selected ? FontWeight.w600 : FontWeight.w500,
+                  color: selected
+                      ? Colors.white
+                      : const Color(0xFF444444),
                 ),
               ),
             ),
@@ -317,9 +311,6 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  // ============================================================
-  // ADDITIONAL FILTERS
-  // ============================================================
   Widget _buildAdditionalFilters() {
     return Row(
       children: [
@@ -327,9 +318,7 @@ class _SearchPageState extends State<SearchPage> {
           child: _filterButton(
             icon: Icons.location_on_outlined,
             title: 'Lokasi',
-            onTap: () {
-              _showSimpleFilter('Lokasi');
-            },
+            onTap: () => _showSimpleFilter('Lokasi'),
           ),
         ),
         const SizedBox(width: 8),
@@ -337,9 +326,7 @@ class _SearchPageState extends State<SearchPage> {
           child: _filterButton(
             icon: Icons.sell_outlined,
             title: 'Harga',
-            onTap: () {
-              _showSimpleFilter('Harga');
-            },
+            onTap: () => _showSimpleFilter('Harga'),
           ),
         ),
         const SizedBox(width: 8),
@@ -347,9 +334,7 @@ class _SearchPageState extends State<SearchPage> {
           child: _filterButton(
             icon: Icons.scale_outlined,
             title: 'Berat',
-            onTap: () {
-              _showSimpleFilter('Berat');
-            },
+            onTap: () => _showSimpleFilter('Berat'),
           ),
         ),
         const SizedBox(width: 8),
@@ -357,9 +342,7 @@ class _SearchPageState extends State<SearchPage> {
           child: _filterButton(
             icon: Icons.calendar_today_outlined,
             title: 'Usia',
-            onTap: () {
-              _showSimpleFilter('Usia');
-            },
+            onTap: () => _showSimpleFilter('Usia'),
           ),
         ),
       ],
@@ -386,12 +369,15 @@ class _SearchPageState extends State<SearchPage> {
           children: [
             Icon(icon, size: 15, color: const Color(0xFF555555)),
             const SizedBox(width: 5),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 11,
-                color: Color(0xFF444444),
-                fontWeight: FontWeight.w500,
+            Flexible(
+              child: Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: Color(0xFF444444),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ],
@@ -400,9 +386,6 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  // ============================================================
-  // RESULT HEADER
-  // ============================================================
   Widget _buildResultHeader() {
     return Row(
       children: [
@@ -417,38 +400,52 @@ class _SearchPageState extends State<SearchPage> {
         const Spacer(),
         Text(
           '${_filteredAnimals.length} hewan',
-          style: const TextStyle(fontSize: 12, color: Color(0xFF888888)),
+          style: const TextStyle(
+            fontSize: 12,
+            color: Color(0xFF888888),
+          ),
         ),
       ],
     );
   }
 
-  // ============================================================
-  // ANIMAL LIST
-  // ============================================================
   Widget _buildAnimalList() {
     if (_filteredAnimals.isEmpty) {
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 50,
+        ),
         child: Column(
           children: [
-            Icon(Icons.search_off, size: 50, color: Colors.grey.shade400),
+            Icon(
+              Icons.search_off,
+              size: 50,
+              color: Colors.grey.shade400,
+            ),
             const SizedBox(height: 12),
             const Text(
               'Hewan tidak ditemukan',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             const SizedBox(height: 5),
             const Text(
               'Coba gunakan kata kunci atau kategori lain.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: Color(0xFF888888)),
+              style: TextStyle(
+                fontSize: 12,
+                color: Color(0xFF888888),
+              ),
             ),
           ],
         ),
       );
     }
+
     return Column(
       children: _filteredAnimals.map((animal) {
         return Padding(
@@ -459,27 +456,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  // ============================================================
-  // ANIMAL CARD
-  // ============================================================
-<<<<<<< HEAD
   Widget _buildAnimalCard(Map<String, dynamic> animal) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: const Color(0xFFE9E9E9)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.035),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-=======
-
-  
-Widget _buildAnimalCard(Map<String, dynamic> animal) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -488,9 +465,7 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AnimalDetailPage(
-                animal: animal,
-              ),
+              builder: (_) => AnimalDetailPage(animal: animal),
             ),
           );
         },
@@ -500,9 +475,7 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              color: const Color(0xFFE9E9E9),
-            ),
+            border: Border.all(color: const Color(0xFFE9E9E9)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.035),
@@ -510,53 +483,16 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                 offset: const Offset(0, 2),
               ),
             ],
->>>>>>> 18231e1 (Update Search and Animal Detail pages)
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // FOTO HEWAN
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.asset(
                   animal['image'] ?? '',
                   width: 92,
                   height: 92,
-<<<<<<< HEAD
-                  color: const Color(0xFFEFEFEF),
-                  child: const Icon(
-                    Icons.image_not_supported_outlined,
-                    color: Colors.grey,
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(width: 11),
-          // DETAIL
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    _verifiedBadge(),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          animal['favorite'] = !(animal['favorite'] ?? false);
-                        });
-                      },
-                      child: Icon(
-                        animal['favorite'] == true
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        size: 22,
-                        color: animal['favorite'] == true
-                            ? const Color(0xFFE53935)
-                            : const Color(0xFF777777),
-=======
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
@@ -566,78 +502,12 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                       child: const Icon(
                         Icons.image_not_supported_outlined,
                         color: Colors.grey,
->>>>>>> 18231e1 (Update Search and Animal Detail pages)
                       ),
                     );
                   },
                 ),
-<<<<<<< HEAD
-                const SizedBox(height: 5),
-                Text(
-                  animal['name'],
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF222222),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.scale_outlined,
-                      size: 14,
-                      color: Color(0xFF858585),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      animal['weight'],
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: Color(0xFF777777),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    const Icon(
-                      Icons.access_time,
-                      size: 14,
-                      color: Color(0xFF858585),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      animal['age'],
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: Color(0xFF777777),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on_outlined,
-                      size: 14,
-                      color: Color(0xFF858585),
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        animal['location'],
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: Color(0xFF777777),
-=======
               ),
-
               const SizedBox(width: 11),
-
-              // INFORMASI HEWAN
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -646,8 +516,6 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                       children: [
                         _verifiedBadge(),
                         const Spacer(),
-
-                        // TOMBOL FAVORIT
                         GestureDetector(
                           onTap: () {
                             setState(() {
@@ -667,14 +535,10 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                                   : const Color(0xFF777777),
                             ),
                           ),
->>>>>>> 18231e1 (Update Search and Animal Detail pages)
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 5),
-
-                    // NAMA HEWAN
                     Text(
                       animal['name'] ?? 'Hewan Qurban',
                       maxLines: 1,
@@ -685,10 +549,7 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                         color: Color(0xFF222222),
                       ),
                     ),
-
                     const SizedBox(height: 5),
-
-                    // BERAT DAN USIA
                     Row(
                       children: [
                         const Icon(
@@ -700,6 +561,7 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                         Flexible(
                           child: Text(
                             animal['weight'] ?? '-',
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontSize: 11,
                               color: Color(0xFF777777),
@@ -716,6 +578,7 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                         Flexible(
                           child: Text(
                             animal['age'] ?? '-',
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontSize: 11,
                               color: Color(0xFF777777),
@@ -724,10 +587,7 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 4),
-
-                    // LOKASI
                     Row(
                       children: [
                         const Icon(
@@ -749,10 +609,7 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 5),
-
-                    // HARGA
                     Text(
                       animal['price'] ?? '-',
                       style: const TextStyle(
@@ -763,34 +620,20 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                     ),
                   ],
                 ),
-<<<<<<< HEAD
-                const SizedBox(height: 5),
-                Text(
-                  animal['price'],
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    color: _primaryGreen,
-                  ),
-                ),
-              ],
-            ),
-=======
               ),
             ],
->>>>>>> 18231e1 (Update Search and Animal Detail pages)
           ),
         ),
       ),
     );
   }
 
-  // ============================================================
-  // VERIFIED BADGE
-  // ============================================================
   Widget _verifiedBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 7,
+        vertical: 3,
+      ),
       decoration: BoxDecoration(
         color: const Color(0xFFE4F7EE),
         borderRadius: BorderRadius.circular(6),
@@ -798,7 +641,11 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
       child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.verified, size: 13, color: _primaryGreen),
+          Icon(
+            Icons.verified,
+            size: 13,
+            color: _primaryGreen,
+          ),
           SizedBox(width: 3),
           Text(
             'Terverifikasi',
@@ -813,15 +660,14 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
     );
   }
 
-  // ============================================================
-  // FILTER BOTTOM SHEET
-  // ============================================================
   void _showFilterSheet() {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(22),
+        ),
       ),
       builder: (context) {
         return Padding(
@@ -834,7 +680,10 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                 children: [
                   const Text(
                     'Filter Hewan',
-                    style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const Spacer(),
                   IconButton(
@@ -846,7 +695,10 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
               const SizedBox(height: 15),
               const Text(
                 'Kategori',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(height: 10),
               Wrap(
@@ -854,6 +706,7 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                 runSpacing: 8,
                 children: _categories.map((category) {
                   final selected = _selectedCategory == category;
+
                   return ChoiceChip(
                     label: Text(category),
                     selected: selected,
@@ -875,9 +728,7 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _primaryGreen,
                     foregroundColor: Colors.white,
@@ -886,10 +737,7 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Terapkan Filter',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
+                  child: const Text('Terapkan Filter'),
                 ),
               ),
             ],
@@ -899,54 +747,55 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
     );
   }
 
-  // ============================================================
-  // SIMPLE FILTER
-  // ============================================================
   void _showSimpleFilter(String filterName) {
+    List<String> options;
+
+    switch (filterName) {
+      case 'Lokasi':
+        options = [
+          'Semua Lokasi',
+          'Jawa Barat',
+          'Jawa Tengah',
+          'DI Yogyakarta',
+        ];
+        break;
+      case 'Harga':
+        options = [
+          'Semua Harga',
+          'Di bawah Rp 5 juta',
+          'Rp 5 - 15 juta',
+          'Rp 15 - 30 juta',
+          'Di atas Rp 30 juta',
+        ];
+        break;
+      case 'Berat':
+        options = [
+          'Semua Berat',
+          'Di bawah 50 kg',
+          '50 - 100 kg',
+          '100 - 300 kg',
+          'Di atas 300 kg',
+        ];
+        break;
+      default:
+        options = [
+          'Semua Usia',
+          'Di bawah 1 tahun',
+          '1 - 2 tahun',
+          '2 - 3 tahun',
+          'Di atas 3 tahun',
+        ];
+    }
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(22),
+        ),
       ),
       builder: (context) {
-        List<String> options;
-        switch (filterName) {
-          case 'Lokasi':
-            options = [
-              'Semua Lokasi',
-              'Jawa Barat',
-              'Jawa Tengah',
-              'DI Yogyakarta',
-            ];
-            break;
-          case 'Harga':
-            options = [
-              'Semua Harga',
-              'Di bawah Rp 5 juta',
-              'Rp 5 - 15 juta',
-              'Rp 15 - 30 juta',
-              'Di atas Rp 30 juta',
-            ];
-            break;
-          case 'Berat':
-            options = [
-              'Semua Berat',
-              'Di bawah 50 kg',
-              '50 - 100 kg',
-              '100 - 300 kg',
-              'Di atas 300 kg',
-            ];
-            break;
-          default:
-            options = [
-              'Semua Usia',
-              'Di bawah 1 tahun',
-              '1 - 2 tahun',
-              '2 - 3 tahun',
-              'Di atas 3 tahun',
-            ];
-        }
         return Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
           child: Column(
@@ -964,10 +813,23 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
               ...options.map(
                 (option) => ListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: Text(option, style: const TextStyle(fontSize: 14)),
-                  trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+                  title: Text(
+                    option,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: Colors.grey,
+                  ),
                   onTap: () {
                     Navigator.pop(context);
+                    ScaffoldMessenger.of(this.context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          '$filterName: $option. Filter lanjutan belum diterapkan.',
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -978,21 +840,25 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
     );
   }
 
-  // ============================================================
-  // NAVIGATION BOTTOM NAV
-  // ============================================================
-  Widget _buildBottomNavItem(IconData icon, String label, int index) {
-    bool isSelected = _selectedIndex == index;
+  Widget _buildBottomNavItem(
+    IconData icon,
+    String label,
+    int index,
+  ) {
+    final isSelected = _selectedIndex == index;
+
     return GestureDetector(
       onTap: () {
         if (isSelected) return;
-        Widget nextScreen;
+
+        late final Widget nextScreen;
+
         switch (index) {
           case 0:
             nextScreen = const HomePage();
             break;
           case 1:
-            return; // Sudah di halaman Search
+            return;
           case 2:
             nextScreen = const FavoritePage();
             break;
@@ -1005,33 +871,38 @@ Widget _buildAnimalCard(Map<String, dynamic> animal) {
           default:
             return;
         }
+
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+            pageBuilder: (_, __, ___) => nextScreen,
             transitionDuration: Duration.zero,
             reverseTransitionDuration: Duration.zero,
           ),
         );
       },
-      child: Container(
-        color: Colors.transparent,
+      child: SizedBox(
         width: 60,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               icon,
-              color: isSelected ? _primaryGreen : Colors.grey.shade400,
+              color: isSelected
+                  ? _primaryGreen
+                  : Colors.grey.shade400,
               size: 26,
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? _primaryGreen : Colors.grey.shade400,
+                color: isSelected
+                    ? _primaryGreen
+                    : Colors.grey.shade400,
                 fontSize: 10,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                fontWeight:
+                    isSelected ? FontWeight.bold : FontWeight.w500,
               ),
             ),
           ],
