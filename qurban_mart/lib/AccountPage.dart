@@ -5,6 +5,8 @@ import 'SearchPage.dart';
 import 'Favorite.dart'; // Sesuaikan jika nama file Anda FavoritePage.dart
 import 'OrderPage.dart';
 import 'SaldoQurbanPage.dart';
+import 'SettingsPage.dart';
+import 'AddressPage.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -59,7 +61,14 @@ class _AccountPageState extends State<AccountPage> {
                         ],
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SettingsPage(),
+                            ),
+                          );
+                        },
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         icon: const Icon(
@@ -458,7 +467,12 @@ class _AccountPageState extends State<AccountPage> {
           _buildMenuTile(
             icon: Icons.location_on_outlined,
             title: 'Alamat Saya',
-            onTap: () {}, // Dummy
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddressPage()),
+              );
+            },
           ),
           Divider(height: 1, color: Colors.grey.shade100, indent: 50),
           // Tambahan tombol favorit agar fungsinya tidak hilang
