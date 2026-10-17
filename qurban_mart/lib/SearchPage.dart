@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'AnimalPageDetail.dart';
@@ -6,6 +5,7 @@ import 'HomePage.dart';
 import 'Favorite.dart';
 import 'OrderPage.dart';
 import 'AccountPage.dart';
+import 'FavoriteManager.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -15,20 +15,14 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final TextEditingController _searchController =
-      TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   static const Color _primaryGreen = Color(0xFF1B5E20);
 
   final int _selectedIndex = 1;
   String _selectedCategory = 'Semua';
 
-  final List<String> _categories = [
-    'Semua',
-    'Sapi',
-    'Kambing',
-    'Domba',
-  ];
+  final List<String> _categories = ['Semua', 'Sapi', 'Kambing', 'Domba'];
 
   final List<Map<String, dynamic>> _animals = [
     {
@@ -93,10 +87,12 @@ class _SearchPageState extends State<SearchPage> {
     final query = _searchController.text.toLowerCase().trim();
 
     return _animals.where((animal) {
-      final matchesCategory = _selectedCategory == 'Semua' ||
+      final matchesCategory =
+          _selectedCategory == 'Semua' ||
           animal['category'] == _selectedCategory;
 
-      final matchesSearch = query.isEmpty ||
+      final matchesSearch =
+          query.isEmpty ||
           animal['name'].toString().toLowerCase().contains(query) ||
           animal['category'].toString().toLowerCase().contains(query) ||
           animal['location'].toString().toLowerCase().contains(query);
@@ -180,9 +176,7 @@ class _SearchPageState extends State<SearchPage> {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const HomePage(),
-                ),
+                MaterialPageRoute(builder: (_) => const HomePage()),
               );
             },
             borderRadius: BorderRadius.circular(20),
@@ -211,11 +205,7 @@ class _SearchPageState extends State<SearchPage> {
             borderRadius: BorderRadius.circular(20),
             child: const Padding(
               padding: EdgeInsets.all(4),
-              child: Icon(
-                Icons.tune,
-                size: 24,
-                color: Color(0xFF222222),
-              ),
+              child: Icon(Icons.tune, size: 24, color: Color(0xFF222222)),
             ),
           ),
         ],
@@ -236,10 +226,7 @@ class _SearchPageState extends State<SearchPage> {
         onChanged: (_) => setState(() {}),
         decoration: InputDecoration(
           hintText: 'Cari hewan, lokasi, atau penjual...',
-          hintStyle: const TextStyle(
-            color: Color(0xFF999999),
-            fontSize: 13,
-          ),
+          hintStyle: const TextStyle(color: Color(0xFF999999), fontSize: 13),
           prefixIcon: const Icon(
             Icons.search,
             color: Color(0xFF8D8D8D),
@@ -288,20 +275,15 @@ class _SearchPageState extends State<SearchPage> {
                 color: selected ? _primaryGreen : Colors.white,
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(
-                  color: selected
-                      ? _primaryGreen
-                      : const Color(0xFFE8E8E8),
+                  color: selected ? _primaryGreen : const Color(0xFFE8E8E8),
                 ),
               ),
               child: Text(
                 category,
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight:
-                      selected ? FontWeight.w600 : FontWeight.w500,
-                  color: selected
-                      ? Colors.white
-                      : const Color(0xFF444444),
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                  color: selected ? Colors.white : const Color(0xFF444444),
                 ),
               ),
             ),
@@ -400,10 +382,7 @@ class _SearchPageState extends State<SearchPage> {
         const Spacer(),
         Text(
           '${_filteredAnimals.length} hewan',
-          style: const TextStyle(
-            fontSize: 12,
-            color: Color(0xFF888888),
-          ),
+          style: const TextStyle(fontSize: 12, color: Color(0xFF888888)),
         ),
       ],
     );
@@ -413,33 +392,20 @@ class _SearchPageState extends State<SearchPage> {
     if (_filteredAnimals.isEmpty) {
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 50,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
         child: Column(
           children: [
-            Icon(
-              Icons.search_off,
-              size: 50,
-              color: Colors.grey.shade400,
-            ),
+            Icon(Icons.search_off, size: 50, color: Colors.grey.shade400),
             const SizedBox(height: 12),
             const Text(
               'Hewan tidak ditemukan',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 5),
             const Text(
               'Coba gunakan kata kunci atau kategori lain.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                color: Color(0xFF888888),
-              ),
+              style: TextStyle(fontSize: 12, color: Color(0xFF888888)),
             ),
           ],
         ),
@@ -464,9 +430,7 @@ class _SearchPageState extends State<SearchPage> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => AnimalDetailPage(animal: animal),
-            ),
+            MaterialPageRoute(builder: (_) => AnimalDetailPage(animal: animal)),
           );
         },
         child: Container(
@@ -516,23 +480,39 @@ class _SearchPageState extends State<SearchPage> {
                       children: [
                         _verifiedBadge(),
                         const Spacer(),
+                        // TOMBOL FAVORIT
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              animal['favorite'] =
-                                  !(animal['favorite'] ?? false);
+                              // 1. Simpan ke Global Manager
+                              FavoriteManager.toggleFavorite(animal);
                             });
+
+                            // 2. Langsung pindah ke halaman Favorite (Sesuai permintaan Anda)
+                            // Cek apakah baru saja di-love (ditambah). Jika ya, pindah halaman.
+                            if (FavoriteManager.isFavorite(animal)) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const FavoritePage(),
+                                ),
+                              ).then((_) {
+                                // Refresh ikon love saat kembali dari halaman Favorite
+                                setState(() {});
+                              });
+                            }
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(3),
                             child: Icon(
-                              animal['favorite'] == true
+                              // 3. Ganti pengecekan warna dan ikon menggunakan FavoriteManager
+                              FavoriteManager.isFavorite(animal)
                                   ? Icons.favorite
                                   : Icons.favorite_border,
                               size: 22,
-                              color: animal['favorite'] == true
-                                  ? const Color(0xFFE53935)
-                                  : const Color(0xFF777777),
+                              color: FavoriteManager.isFavorite(animal)
+                                  ? const Color(0xFFE53935) // Merah
+                                  : const Color(0xFF777777), // Abu-abu
                             ),
                           ),
                         ),
@@ -630,10 +610,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _verifiedBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 7,
-        vertical: 3,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
         color: const Color(0xFFE4F7EE),
         borderRadius: BorderRadius.circular(6),
@@ -641,11 +618,7 @@ class _SearchPageState extends State<SearchPage> {
       child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.verified,
-            size: 13,
-            color: _primaryGreen,
-          ),
+          Icon(Icons.verified, size: 13, color: _primaryGreen),
           SizedBox(width: 3),
           Text(
             'Terverifikasi',
@@ -665,9 +638,7 @@ class _SearchPageState extends State<SearchPage> {
       context: context,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(22),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
       builder: (context) {
         return Padding(
@@ -680,10 +651,7 @@ class _SearchPageState extends State<SearchPage> {
                 children: [
                   const Text(
                     'Filter Hewan',
-                    style: TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
                   ),
                   const Spacer(),
                   IconButton(
@@ -695,10 +663,7 @@ class _SearchPageState extends State<SearchPage> {
               const SizedBox(height: 15),
               const Text(
                 'Kategori',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
               Wrap(
@@ -791,9 +756,7 @@ class _SearchPageState extends State<SearchPage> {
       context: context,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(22),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
       builder: (context) {
         return Padding(
@@ -813,14 +776,8 @@ class _SearchPageState extends State<SearchPage> {
               ...options.map(
                 (option) => ListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    option,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                    color: Colors.grey,
-                  ),
+                  title: Text(option, style: const TextStyle(fontSize: 14)),
+                  trailing: const Icon(Icons.chevron_right, color: Colors.grey),
                   onTap: () {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(this.context).showSnackBar(
@@ -840,11 +797,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildBottomNavItem(
-    IconData icon,
-    String label,
-    int index,
-  ) {
+  Widget _buildBottomNavItem(IconData icon, String label, int index) {
     final isSelected = _selectedIndex == index;
 
     return GestureDetector(
@@ -888,21 +841,16 @@ class _SearchPageState extends State<SearchPage> {
           children: [
             Icon(
               icon,
-              color: isSelected
-                  ? _primaryGreen
-                  : Colors.grey.shade400,
+              color: isSelected ? _primaryGreen : Colors.grey.shade400,
               size: 26,
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                color: isSelected
-                    ? _primaryGreen
-                    : Colors.grey.shade400,
+                color: isSelected ? _primaryGreen : Colors.grey.shade400,
                 fontSize: 10,
-                fontWeight:
-                    isSelected ? FontWeight.bold : FontWeight.w500,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               ),
             ),
           ],

@@ -1,13 +1,13 @@
-
 import 'package:flutter/material.dart';
+
+import 'TransactionPage.dart';
+import 'ChatPage.dart';
+import 'Favorite.dart'; // Sesuaikan jika nama file Anda FavoritePage.dart
 
 class AnimalDetailPage extends StatefulWidget {
   final Map<String, dynamic> animal;
 
-  const AnimalDetailPage({
-    super.key,
-    required this.animal,
-  });
+  const AnimalDetailPage({super.key, required this.animal});
 
   @override
   State<AnimalDetailPage> createState() => _AnimalDetailPageState();
@@ -24,15 +24,12 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
   Widget build(BuildContext context) {
     final animal = widget.animal;
 
-    final image =
-        (animal['image'] ?? 'Asset/image/Sapi.png').toString();
+    final image = (animal['image'] ?? 'Asset/image/Sapi.png').toString();
     final name = (animal['name'] ?? 'Sapi Limousin').toString();
-    final price =
-        (animal['price'] ?? 'Rp 24.500.000').toString();
+    final price = (animal['price'] ?? 'Rp 24.500.000').toString();
     final weight = (animal['weight'] ?? '350 kg').toString();
     final age = (animal['age'] ?? '2 tahun').toString();
-    final location =
-        (animal['location'] ?? 'Bogor, Jawa Barat').toString();
+    final location = (animal['location'] ?? 'Bogor, Jawa Barat').toString();
     final category = (animal['category'] ?? 'Sapi').toString();
 
     return Scaffold(
@@ -89,33 +86,30 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                           right: 16,
                           child: Row(
                             children: [
-                              _roundIcon(
-                                isFavorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                () {
-                                  setState(() {
-                                    isFavorite = !isFavorite;
-                                  });
-                                },
-                                color: isFavorite
-                                    ? Colors.red
-                                    : const Color(0xFF222222),
-                              ),
-                              const SizedBox(width: 10),
-                              _roundIcon(
-                                Icons.share_outlined,
-                                () {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'Fitur berbagi akan segera tersedia.',
-                                      ),
+                              IconButton(
+                                icon: const Icon(Icons.favorite_border_rounded),
+                                color: const Color(0xFFE53935), // Warna merah
+                                onPressed: () {
+                                  // Kode ini yang berfungsi memindahkan ke halaman Favorite
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const FavoritePage(),
                                     ),
                                   );
                                 },
                               ),
+                              const SizedBox(width: 10),
+                              _roundIcon(Icons.share_outlined, () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Fitur berbagi akan segera tersedia.',
+                                    ),
+                                  ),
+                                );
+                              }),
                             ],
                           ),
                         ),
@@ -150,9 +144,7 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                   SliverToBoxAdapter(
                     child: Container(
                       color: Colors.white,
-                      padding: const EdgeInsets.fromLTRB(
-                        16, 12, 16, 18,
-                      ),
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 18),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -174,8 +166,7 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                                   child: Container(
                                     width: 74,
                                     decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(9),
+                                      borderRadius: BorderRadius.circular(9),
                                       border: Border.all(
                                         color: selectedPhoto == index
                                             ? green
@@ -184,8 +175,7 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                                       ),
                                     ),
                                     child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(7),
+                                      borderRadius: BorderRadius.circular(7),
                                       child: Image.asset(
                                         image,
                                         fit: BoxFit.cover,
@@ -267,16 +257,12 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                               const CircleAvatar(
                                 radius: 21,
                                 backgroundColor: Color(0xFFE5F2E8),
-                                child: Icon(
-                                  Icons.agriculture,
-                                  color: green,
-                                ),
+                                child: Icon(Icons.agriculture, color: green),
                               ),
                               const SizedBox(width: 10),
                               const Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       'Peternakan Berkah',
@@ -308,8 +294,7 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                               ),
                               OutlinedButton.icon(
                                 onPressed: () {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
+                                  ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text(
                                         'Fitur chat penjual akan segera tersedia.',
@@ -337,9 +322,7 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                     ),
                   ),
 
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 10),
-                  ),
+                  const SliverToBoxAdapter(child: SizedBox(height: 10)),
 
                   // DETAIL HEWAN
                   SliverToBoxAdapter(
@@ -357,16 +340,8 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          _detailRow(
-                            Icons.scale_outlined,
-                            'Berat',
-                            weight,
-                          ),
-                          _detailRow(
-                            Icons.access_time,
-                            'Usia',
-                            age,
-                          ),
+                          _detailRow(Icons.scale_outlined, 'Berat', weight),
+                          _detailRow(Icons.access_time, 'Usia', age),
                           _detailRow(
                             Icons.health_and_safety_outlined,
                             'Kondisi',
@@ -375,9 +350,7 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                           _detailRow(
                             Icons.pets_outlined,
                             'Jenis',
-                            category == 'Sapi'
-                                ? 'Sapi Limousin'
-                                : name,
+                            category == 'Sapi' ? 'Sapi Limousin' : name,
                           ),
                           _detailRow(
                             Icons.location_on_outlined,
@@ -423,18 +396,14 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                     ),
                   ),
 
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 18),
-                  ),
+                  const SliverToBoxAdapter(child: SizedBox(height: 18)),
                 ],
               ),
             ),
 
             // TOMBOL AKSI BAGIAN BAWAH
             Container(
-              padding: const EdgeInsets.fromLTRB(
-                16, 12, 16, 12,
-              ),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -450,25 +419,19 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Fitur chat penjual akan segera tersedia.',
-                            ),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatPage(animal: animal),
                           ),
                         );
                       },
-                      icon: const Icon(
-                        Icons.chat_outlined,
-                        size: 18,
-                      ),
+                      icon: const Icon(Icons.chat_outlined, size: 18),
                       label: const Text('Chat Penjual'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: green,
                         side: const BorderSide(color: green),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                     ),
                   ),
@@ -476,27 +439,21 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Hewan siap dipesan. '
-                              'Lanjutkan ke checkout untuk '
-                              'menyelesaikan pesanan.',
-                            ),
+                        // atau onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                TransactionPage(animal: animal),
                           ),
                         );
                       },
-                      icon: const Icon(
-                        Icons.shopping_cart_outlined,
-                        size: 18,
-                      ),
+                      icon: const Icon(Icons.shopping_cart_outlined, size: 18),
                       label: const Text('Pesan Sekarang'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: green,
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -526,39 +483,24 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
         customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Icon(
-            icon,
-            size: 20,
-            color: color,
-          ),
+          child: Icon(icon, size: 20, color: color),
         ),
       ),
     );
   }
 
   // BARIS INFORMASI DETAIL HEWAN
-  Widget _detailRow(
-    IconData icon,
-    String label,
-    String value,
-  ) {
+  Widget _detailRow(IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 11),
       child: Row(
         children: [
-          Icon(
-            icon,
-            size: 17,
-            color: const Color(0xFF777777),
-          ),
+          Icon(icon, size: 17, color: const Color(0xFF777777)),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Color(0xFF666666),
-              ),
+              style: const TextStyle(fontSize: 12, color: Color(0xFF666666)),
             ),
           ),
           Text(
