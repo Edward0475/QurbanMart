@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'EditProfilePage.dart';
+import 'SecurityPage.dart';
+import 'PaymentCardsPage.dart';
+import 'FaqPage.dart';
+import 'TermsPage.dart';
+import 'PrivacyPage.dart';
+import 'AboutPage.dart';
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -50,18 +58,40 @@ class _SettingsPageState extends State<SettingsPage> {
             // --- BAGIAN 1: AKUN ---
             _buildSectionTitle('Akun'),
             _buildSettingCard([
-              _buildListTile(Icons.person_outline, 'Edit Profil', onTap: () {}),
+              _buildListTile(
+                Icons.person_outline,
+                'Edit Profil',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    // HAPUS kata const sebelum EditProfilePage()
+                    MaterialPageRoute(builder: (context) => EditProfilePage()),
+                  );
+                },
+              ),
               _buildDivider(),
               _buildListTile(
                 Icons.shield_outlined,
                 'Keamanan & Kata Sandi',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    // HAPUS kata const sebelum SecurityPage()
+                    MaterialPageRoute(builder: (context) => SecurityPage()),
+                  );
+                },
               ),
               _buildDivider(),
               _buildListTile(
                 Icons.credit_card_outlined,
                 'Kartu & Rekening Tersimpan',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    // HAPUS kata const sebelum PaymentCardsPage()
+                    MaterialPageRoute(builder: (context) => PaymentCardsPage()),
+                  );
+                },
               ),
             ]),
             const SizedBox(height: 24),
@@ -105,25 +135,45 @@ class _SettingsPageState extends State<SettingsPage> {
               _buildListTile(
                 Icons.help_outline,
                 'Pusat Bantuan (FAQ)',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FaqPage()),
+                  );
+                },
               ),
               _buildDivider(),
               _buildListTile(
                 Icons.article_outlined,
                 'Syarat & Ketentuan',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TermsPage()),
+                  );
+                },
               ),
               _buildDivider(),
               _buildListTile(
                 Icons.privacy_tip_outlined,
                 'Kebijakan Privasi',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PrivacyPage()),
+                  );
+                },
               ),
               _buildDivider(),
               _buildListTile(
                 Icons.info_outline,
                 'Tentang QurbanMart',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutPage()),
+                  );
+                },
               ),
             ]),
             const SizedBox(height: 30),
