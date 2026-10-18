@@ -7,6 +7,7 @@ import 'FaqPage.dart';
 import 'TermsPage.dart';
 import 'PrivacyPage.dart';
 import 'AboutPage.dart';
+import 'Login.dart'; // Ganti dengan nama file Login Anda jika berbeda
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -179,15 +180,65 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(height: 30),
 
             // --- BAGIAN 4: KELUAR / LOGOUT ---
+            // --- BAGIAN 4: KELUAR / LOGOUT ---
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Logika logout bisa ditambahkan di sini
+                  // Munculkan dialog konfirmasi sebelum benar-benar keluar
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text(
+                          'Keluar Akun',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        content: const Text(
+                          'Apakah Anda yakin ingin keluar dari aplikasi QurbanMart?',
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context), // Batal
+                            child: const Text(
+                              'Batal',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Hapus semua rute sebelumnya dan ke Halaman Login
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                // Ganti LoginPage() sesuai dengan class Login Anda
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                                (Route<dynamic> route) => false,
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const Text(
+                              'Keluar',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red.shade50,
-                  foregroundColor: Colors.red,
+                  foregroundColor: const Color.fromARGB(255, 27, 99, 5),
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
