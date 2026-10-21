@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'AccountPage.dart';
@@ -6,6 +5,7 @@ import 'OrderPage.dart';
 import 'Favorite.dart';
 import 'SearchPage.dart';
 import 'NotificationPage.dart';
+import 'FarmDetailPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -92,10 +92,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Row(
                         children: [
-                          Image.asset(
-                            'Asset/image/QurbanMart.png',
-                            height: 40,
-                          ),
+                          Image.asset('Asset/image/QurbanMart.png', height: 40),
                           const SizedBox(width: 8),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,9 +137,7 @@ class _HomePageState extends State<HomePage> {
                     horizontal: 24,
                     vertical: 16,
                   ),
-                  child: _buildAestheticBanner(
-                    'Asset/image/Bannersapi.png',
-                  ),
+                  child: _buildAestheticBanner('Asset/image/Bannersapi.png'),
                 ),
 
                 // 3. SEARCH BAR
@@ -155,15 +150,11 @@ class _HomePageState extends State<HomePage> {
                     onTap: () => _navigateTo(const SearchPage()),
                     child: Container(
                       height: 55,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          color: Colors.grey.shade300,
-                        ),
+                        border: Border.all(color: Colors.grey.shade300),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.05),
@@ -213,20 +204,14 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      _buildCategoryItem('Asset/image/logoSapi.jpeg', 'Sapi'),
                       _buildCategoryItem(
-                        'Asset/image/logoSapi.png',
-                        'Sapi',
-                      ),
-                      _buildCategoryItem(
-                        'Asset/image/logoKambing.png',
+                        'Asset/image/logoKambing.jpeg',
                         'Kambing',
                       ),
+                      _buildCategoryItem('Asset/image/logoDomba.jpeg', 'Domba'),
                       _buildCategoryItem(
-                        'Asset/image/logoDomba.png',
-                        'Domba',
-                      ),
-                      _buildCategoryItem(
-                        'Asset/image/logoSapi.png',
+                        'Asset/image/logoSapi.jpeg',
                         'Patungan\nSapi 1/7',
                       ),
                     ],
@@ -345,26 +330,10 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildBottomNavItem(Icons.home, 'Home', 0),
-                  _buildBottomNavItem(
-                    Icons.search_outlined,
-                    'Search',
-                    1,
-                  ),
-                  _buildBottomNavItem(
-                    Icons.favorite_border,
-                    'Favorit',
-                    2,
-                  ),
-                  _buildBottomNavItem(
-                    Icons.receipt_long,
-                    'Order',
-                    3,
-                  ),
-                  _buildBottomNavItem(
-                    Icons.person_outline,
-                    'Akun',
-                    4,
-                  ),
+                  _buildBottomNavItem(Icons.search_outlined, 'Search', 1),
+                  _buildBottomNavItem(Icons.favorite_border, 'Favorit', 2),
+                  _buildBottomNavItem(Icons.receipt_long, 'Order', 3),
+                  _buildBottomNavItem(Icons.person_outline, 'Akun', 4),
                 ],
               ),
             ),
@@ -411,10 +380,7 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Colors.grey.shade200),
           ),
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.contain,
-          ),
+          child: Image.asset(imagePath, fit: BoxFit.contain),
         ),
         const SizedBox(height: 8),
         Text(
@@ -464,10 +430,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(12),
             child: Text(
               title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
           ),
         ],
@@ -476,122 +439,112 @@ class _HomePageState extends State<HomePage> {
   }
 
   // WIDGET KARTU PETERNAK
+  // WIDGET KARTU PETERNAK
   Widget _buildPeternakCard(Map<String, dynamic> peternak) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+    return GestureDetector(
+      onTap: () {
+        // Navigasi ke halaman detail peternak dengan membawa data 'peternak'
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FarmDetailPage(peternak: peternak),
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              peternak['image'],
-              width: 70,
-              height: 70,
-              fit: BoxFit.cover,
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade200, width: 0.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  peternak['name'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: Colors.black87,
+          ],
+        ),
+        // ... sisa kodingan isi kartu Anda (Row, Image, Column teks) tidak perlu diubah ...
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                peternak['image'],
+                width: 70,
+                height: 70,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    peternak['name'],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Color(0xFF1E293B),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      peternak['rating'],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.amber, size: 14),
+                      const SizedBox(width: 4),
+                      Text(
+                        peternak['rating'],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                    Flexible(
-                      child: Text(
+                      const SizedBox(width: 4),
+                      Text(
                         '(${peternak['reviews']})',
-                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 12,
+                          color: Colors.grey.shade500,
+                          fontSize: 11,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.location_on,
-                      color: Colors.grey.shade400,
-                      size: 14,
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        peternak['location'],
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 12,
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.location_on,
+                        color: Colors.grey.shade400,
+                        size: 12,
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          peternak['location'],
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontSize: 11,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF1F8F1),
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: Icon(
-              Icons.favorite_border,
-              color: _primaryGreen,
-              size: 20,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   // NAVIGASI BAWAH
-  Widget _buildBottomNavItem(
-    IconData icon,
-    String label,
-    int index,
-  ) {
+  Widget _buildBottomNavItem(IconData icon, String label, int index) {
     final bool isSelected = _selectedIndex == index;
 
     return GestureDetector(
@@ -623,22 +576,16 @@ class _HomePageState extends State<HomePage> {
           children: [
             Icon(
               icon,
-              color: isSelected
-                  ? _primaryGreen
-                  : Colors.grey.shade400,
+              color: isSelected ? _primaryGreen : Colors.grey.shade400,
               size: 26,
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                color: isSelected
-                    ? _primaryGreen
-                    : Colors.grey.shade400,
+                color: isSelected ? _primaryGreen : Colors.grey.shade400,
                 fontSize: 10,
-                fontWeight: isSelected
-                    ? FontWeight.bold
-                    : FontWeight.w500,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               ),
             ),
           ],
