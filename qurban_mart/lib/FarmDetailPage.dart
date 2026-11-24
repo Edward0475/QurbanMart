@@ -14,53 +14,250 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
   static const Color _bgColor = Color(0xFFFCFDF9);
 
   int _activeTab = 0; // 0: Tentang, 1: Ulasan, 2: Produk
+  final TextEditingController _reviewController = TextEditingController();
+  int _selectedRating = 5;
 
-  // Dummy data hewan yang dijual peternak ini
-  final List<Map<String, dynamic>> _hewanTersedia = [
-    {
-      'name': 'Sapi Limousin',
-      'price': 'Rp 24.500.000',
-      'image': 'Asset/image/Sapi.png',
+  // Data unik per seller (Banner, Avatar, Deskripsi, Produk, dan Ulasan)
+  final Map _sellerDatabase = {
+    'Berkah Farmer': {
+      'banner': 'Asset/image/Berkah.jpg',
+      'avatar': 'Asset/image/Bali.png',
+      'about': 'Peternakan sapi unggulan asal Bandung dengan pakan hijauan alami dan pengawasan dokter hewan rutin. Semua sapi sudah  dilengkapi sertifikat bebas PMK.',
+      'products': [
+        {
+          'name': 'Sapi Limousin Super',
+          'weight': '450 kg',
+          'price': 'Rp 24.500.000',
+          'image': 'Asset/image/Sapi.png',
+        },
+        {
+          'name': 'kambimng Boer',
+          'weight': '330 kg',
+          'price': 'Rp 19.500.000',
+          'image': 'Asset/image/Boer.jpg',
+        },
+        {
+          'name': 'Sapi Brahman Cross',
+          'weight': '± 350 kg',
+          'price': 'Rp 3.100.000',
+          'image': 'Asset/image/Brahman.jpeg',
+        },
+      ],
+      'reviews': [
+        {
+          'user': 'Ahmad Fauzi',
+          'rating': 5,
+          'date': '2 hari lalu',
+          'comment': 'Sapinya sehat, bobot sesuai deskripsi, dan pengiriman tepat waktu ke Bandung.',
+        },
+        {
+          'user': 'Rina Kartika',
+          'rating': 5,
+          'date': '1 minggu lalu',
+          'comment': 'Admin ramah, dikirimi video kondisi sapi sebelum dikirim. Sangat amanah.',
+        },
+      ],
     },
-    {
-      'name': 'Kambing Etawa',
-      'price': 'Rp 4.500.000',
-      'image': 'Asset/image/Kambinghidup.png', // Sesuaikan dengan asset Anda
+    'Barokah Livestock': {
+      'banner': 'Asset/image/Kurbanmu.png',
+      'avatar': 'Asset/image/Boer.png',
+      'about': 'Spesialis kambing kurban dan paket aqiqah higienis di Cianjur. Menyediakan kambing hidup maupun paket olahan siap saji sesuai syariat.',
+      'products': [
+        {
+          'name': 'Kambing Boer Premium',
+          'weight': '42 kg',
+          'price': 'Rp 4.800.000',
+          'image': 'Asset/image/Boer.png',
+        },
+        {
+          'name': 'Kambing Etawa Jantan',
+          'weight': '38 kg',
+          'price': 'Rp 4.500.000',
+          'image': 'Asset/image/Etawa.jpeg',
+        },
+        {
+          'name': 'Paket Aqiqah Siap Saji',
+          'weight': '50 Box',
+          'price': 'Rp 3.200.000',
+          'image': 'Asset/image/Siapsaji.png',
+        },
+      ],
+      'reviews': [
+        {
+          'user': 'Dimas Pratama',
+          'rating': 5,
+          'date': '3 hari lalu',
+          'comment': 'Kambing Boer-nya gemuk dan tidak bau prengus. Rekomendasi buat kurban!',
+        },
+        {
+          'user': 'Siti Nurhaliza',
+          'rating': 4,
+          'date': '2 minggu lalu',
+          'comment': 'Paket aqiqah siap sajinya enak dan porsinya pas untuk acara keluarga.',
+        },
+      ],
     },
-  ];
+    'Maju Bersama Farm': {
+      'banner': 'Asset/image/Tree.png',
+      'avatar': 'Asset/image/Domba.png',
+      'about': 'Peternakan domba Garut pilihan langsung dari peternak lokal. Perawatan intensif di dataran tinggi menghasilkan ternak yang sehat dan lincah.',
+      'products': [
+        {
+          'name': 'Domba Garut Tanduk',
+          'weight': '40 kg',
+          'price': 'Rp 4.200.000',
+          'image': 'Asset/image/Domba.png',
+        },
+        {
+          'name': 'Domba Ekor Gemuk',
+          'weight': '35 kg',
+          'price': 'Rp 3.600.000',
+          'image': 'Asset/image/Kambing.png',
+        },
+        {
+          'name': 'Domba Aqiqah Sehat',
+          'weight': '28 kg',
+          'price': 'Rp 2.900.000',
+          'image': 'Asset/image/Domba.png',
+        },
+      ],
+      'reviews': [
+        {
+          'user': 'Hendra Wijaya',
+          'rating': 5,
+          'date': '5 hari lalu',
+          'comment': 'Domba Garutnya gagah dan sehat. Surat keterangan kesehatannya lengkap.',
+        },
+        {
+          'user': 'Nadia Putri',
+          'rating': 5,
+          'date': '3 minggu lalu',
+          'comment': 'Proses titip salurkan sangat transparan, dapat foto & video penyembelihan.',
+        },
+      ],
+    },
+    'Rizky Farm': {
+      'banner': 'Asset/image/Bannersapi.png',
+      'avatar': 'Asset/image/Sapi.png',
+      'about': 'Mitra peternak terpercaya di Sumedang yang menyediakan berbagai pilihan sapi dan domba berkualitas dengan harga transparan.',
+      'products': [
+        {
+          'name': 'Sapi Brahman Cross',
+          'weight': '410 kg',
+          'price': 'Rp 22.800.000',
+          'image': 'Asset/image/Sapi.png',
+        },
+        {
+          'name': 'Kambing Jawa Randu',
+          'weight': '34 kg',
+          'price': 'Rp 3.400.000',
+          'image': 'Asset/image/Kambing.png',
+        },
+      ],
+      'reviews': [
+        {
+          'user': 'Budi Santoso',
+          'rating': 5,
+          'date': '1 minggu lalu',
+          'comment': 'Pelayanan cepat dan ramah, harga bersahabat langsung dari kandang.',
+        },
+      ],
+    },
+  };
+
+  late Map _currentSellerData;
+  final List _hewanTersedia = [];
+  final List _ulasanList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final String sellerName = widget.peternak['name'] ?? '';
+    _currentSellerData =
+        _sellerDatabase[sellerName] ??
+        {
+          'banner': 'Asset/image/Bannersapi.png',
+          'avatar': widget.peternak['image'] ?? 'Asset/image/Bali.png',
+          'about': 'Peternakan sapi dan kambing sehat dengan standar kesehatan tinggi. Semua hewan kami dilengkapi sertifikat bebas PMK.',
+          'products': [
+            {
+              'name': 'Sapi Limousin',
+              'weight': '420 kg',
+              'price': 'Rp 24.500.000',
+              'image': 'Asset/image/Sapi.png',
+            },
+            {
+              'name': 'Kambing Etawa',
+              'weight': '38 kg',
+              'price': 'Rp 4.500.000',
+              'image': 'Asset/image/Kambinghidup.png',
+            },
+          ],
+          'reviews': [
+            {
+              'user': 'Pelanggan QurbanMart',
+              'rating': 5,
+              'date': 'Baru saja',
+              'comment':
+                  'Hewan sehat, terawat, dan pelayanan peternak sangat amanah.',
+            },
+          ],
+        };
+
+    _hewanTersedia.addAll(_currentSellerData['products'] as List);
+    _ulasanList.addAll(_currentSellerData['reviews'] as List);
+  }
+
+  @override
+  void dispose() {
+    _reviewController.dispose();
+    super.dispose();
+  }
+
+  void _tambahUlasan() {
+    if (_reviewController.text.trim().isEmpty) return;
+    setState(() {
+      _ulasanList.insert(0, {
+        'user': 'Anda (Pengunjung)',
+        'rating': _selectedRating,
+        'date': 'Baru saja',
+        'comment': _reviewController.text.trim(),
+      });
+      _reviewController.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final String bannerImage = _currentSellerData['banner'];
+    final String avatarImage =
+        widget.peternak['image'] ?? _currentSellerData['avatar'];
+    final String aboutText = _currentSellerData['about'];
+
     return Scaffold(
       backgroundColor: _bgColor,
       body: Stack(
         children: [
           // KONTEN UTAMA
           SingleChildScrollView(
-            padding: const EdgeInsets.only(
-              bottom: 100,
-            ), // Ruang untuk tombol bawah
+            padding: const EdgeInsets.only(bottom: 100),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // --- 1. HEADER (BANNER & AVATAR) ---
+                // --- 1. HEADER (BANNER & AVATAR UNIK PER SELLER) ---
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    // Banner Image
                     Container(
                       height: 180,
                       width: double.infinity,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(
-                            'Asset/image/Bannersapi.png',
-                          ), // Gunakan banner default
+                          image: AssetImage(bannerImage),
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
-                    // Tombol Back Floating
                     Positioned(
                       top: 50,
                       left: 20,
@@ -80,7 +277,6 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
                         ),
                       ),
                     ),
-                    // Foto Profil (Avatar) Peternak
                     Positioned(
                       bottom: -40,
                       left: 24,
@@ -92,15 +288,12 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
                           border: Border.all(color: Colors.white, width: 4),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 8,
                             ),
                           ],
                           image: DecorationImage(
-                            image: AssetImage(
-                              widget.peternak['image'] ??
-                                  'Asset/image/Bali.png',
-                            ),
+                            image: AssetImage(avatarImage),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -108,7 +301,8 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 50), // Jarak setelah avatar meluap
+                const SizedBox(height: 50),
+
                 // --- 2. INFO PETERNAK ---
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -157,17 +351,19 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
                             const SizedBox(height: 6),
                             Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.location_on,
                                   color: _primaryGreen,
                                   size: 14,
                                 ),
                                 const SizedBox(width: 4),
-                                Text(
-                                  widget.peternak['location'],
-                                  style: TextStyle(
-                                    color: Colors.grey.shade600,
-                                    fontSize: 13,
+                                Expanded(
+                                  child: Text(
+                                    widget.peternak['location'],
+                                    style: TextStyle(
+                                      color: Colors.grey.shade600,
+                                      fontSize: 13,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -175,7 +371,6 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
                           ],
                         ),
                       ),
-                      // Badge Peternak Terpercaya
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
@@ -216,19 +411,19 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buildTabItem('Tentang', 0),
-                      _buildTabItem('Ulasan (120)', 1),
-                      _buildTabItem('Produk', 2),
+                      _buildTabItem('Ulasan (${_ulasanList.length})', 1),
+                      _buildTabItem('Produk (${_hewanTersedia.length})', 2),
                     ],
                   ),
                 ),
                 const SizedBox(height: 24),
 
-                // --- 4. KONTEN TAB (TENTANG) ---
+                // --- 4. KONTEN TAB 0: TENTANG ---
                 if (_activeTab == 0) ...[
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Text(
-                      'Peternakan sapi dan kambing sehat dengan standar kesehatan tinggi. Semua hewan kami dilengkapi sertifikat bebas PMK dan siap untuk ibadah Qurban maupun Aqiqah Anda.',
+                      aboutText,
                       style: TextStyle(
                         color: Colors.grey.shade700,
                         fontSize: 14,
@@ -237,7 +432,6 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Badges Layanan
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Wrap(
@@ -260,8 +454,6 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
                     ),
                   ),
                   const SizedBox(height: 32),
-
-                  // --- 5. HEWAN TERSEDIA ---
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child: Text(
@@ -274,29 +466,184 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  GridView.builder(
+                  _buildProductGrid(),
+                ],
+
+                // --- 5. KONTEN TAB 1: ULASAN LANGSUNG ---
+                if (_activeTab == 1) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.grey.shade200),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Tulis Ulasan Langsung',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Color(0xFF1E293B),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: List.generate(5, (index) {
+                              return GestureDetector(
+                                onTap: () =>
+                                    setState(() => _selectedRating = index + 1),
+                                child: Icon(
+                                  index < _selectedRating
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  color: Colors.amber,
+                                  size: 24,
+                                ),
+                              );
+                            }),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: _reviewController,
+                                  decoration: InputDecoration(
+                                    hintText:
+                                        'Bagikan pengalamanmu dengan ${widget.peternak['name']}...',
+                                    hintStyle: const TextStyle(fontSize: 12),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 10,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey.shade300,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              ElevatedButton(
+                                onPressed: _tambahUlasan,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: _primaryGreen,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Kirim',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                          childAspectRatio:
-                              0.85, // Menyesuaikan proporsi kartu gambar
-                        ),
-                    itemCount: _hewanTersedia.length,
+                    itemCount: _ulasanList.length,
                     itemBuilder: (context, index) {
-                      return _buildAnimalCard(_hewanTersedia[index]);
+                      final item = _ulasanList[index];
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: Colors.grey.shade200),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  item['user'],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                    color: Color(0xFF1E293B),
+                                  ),
+                                ),
+                                Text(
+                                  item['date'],
+                                  style: TextStyle(
+                                    color: Colors.grey.shade500,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: List.generate(
+                                item['rating'],
+                                (_) => const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                  size: 14,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              item['comment'],
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontSize: 13,
+                                height: 1.4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
                     },
                   ),
+                ],
+
+                // --- 6. KONTEN TAB 2: DAFTAR PRODUK ---
+                if (_activeTab == 2) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      'Daftar Produk ${widget.peternak['name']}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: Color(0xFF1E293B),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildProductGrid(),
                 ],
               ],
             ),
           ),
 
-          // --- 6. TOMBOL HUBUNGI PETERNAK (BOTTOM NAV) ---
+          // --- 7. TOMBOL HUBUNGI PETERNAK ---
           Positioned(
             bottom: 24,
             left: 24,
@@ -305,7 +652,14 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
               height: 55,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Aksi hubungi peternak (bisa dialihkan ke ChatPage)
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Menghubungi ${widget.peternak['name']}...',
+                      ),
+                      backgroundColor: _primaryGreen,
+                    ),
+                  );
                 },
                 icon: const Icon(Icons.person, color: Colors.white),
                 label: const Text(
@@ -322,7 +676,7 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   elevation: 5,
-                  shadowColor: _primaryGreen.withOpacity(0.4),
+                  shadowColor: _primaryGreen.withValues(alpha: 0.4),
                 ),
               ),
             ),
@@ -332,13 +686,31 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
     );
   }
 
+  Widget _buildProductGrid() {
+    return GridView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 0.80,
+      ),
+      itemCount: _hewanTersedia.length,
+      itemBuilder: (context, index) {
+        return _buildAnimalCard(_hewanTersedia[index]);
+      },
+    );
+  }
+
   // WIDGET BANTUAN UNTUK TAB
   Widget _buildTabItem(String title, int index) {
     bool isActive = _activeTab == index;
     return GestureDetector(
       onTap: () => setState(() => _activeTab = index),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         decoration: BoxDecoration(
           color: isActive ? _primaryGreen : const Color(0xFFF1F5F9),
           borderRadius: BorderRadius.circular(20),
@@ -348,7 +720,7 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
           style: TextStyle(
             color: isActive ? Colors.white : Colors.grey.shade600,
             fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
-            fontSize: 13,
+            fontSize: 12,
           ),
         ),
       ),
@@ -383,7 +755,7 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
   }
 
   // WIDGET KARTU HEWAN TERSEDIA
-  Widget _buildAnimalCard(Map<String, dynamic> animal) {
+  Widget _buildAnimalCard(dynamic animal) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -391,7 +763,7 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -424,12 +796,21 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
               children: [
                 Text(
                   animal['name'],
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 14,
+                    fontSize: 13,
                     color: Color(0xFF1E293B),
                   ),
                 ),
+                if (animal['weight'] != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    'Estimasi: ${animal['weight']}',
+                    style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                  ),
+                ],
                 const SizedBox(height: 4),
                 Text(
                   animal['price'],

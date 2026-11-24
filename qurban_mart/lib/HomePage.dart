@@ -18,10 +18,9 @@ class _HomePageState extends State<HomePage> {
   final Color _primaryGreen = const Color(0xFF1B5E20);
   final int _selectedIndex = 0;
 
-  // Data dummy peternak
   final List<Map<String, dynamic>> _peternakList = [
     {
-      'name': 'Sumber Rezeki Farm',
+      'name': 'Berkah Farmer',
       'rating': '4.8',
       'reviews': '120 ulasan',
       'location': 'Bandung, Jawa Barat',
