@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'ChatPage.dart';
+import 'AnimalPageDetail.dart'; // Sesuaikan dengan nama file AnimalDetail di folder lib/ kamu
+
 class FarmDetailPage extends StatefulWidget {
   final Map<String, dynamic> peternak;
 
@@ -11,36 +14,56 @@ class FarmDetailPage extends StatefulWidget {
 
 class _FarmDetailPageState extends State<FarmDetailPage> {
   static const Color _primaryGreen = Color(0xFF166036);
-  static const Color _bgColor = Color(0xFFFCFDF9);
+  static const Color _lightGreen = Color(0xFFE6F4EA);
+  static const Color _bgColor = Color(0xFFF8FAF8);
 
   int _activeTab = 0; // 0: Tentang, 1: Ulasan, 2: Produk
   final TextEditingController _reviewController = TextEditingController();
   int _selectedRating = 5;
 
-  // Data unik per seller (Banner, Avatar, Deskripsi, Produk, dan Ulasan)
-  final Map _sellerDatabase = {
+  // Data unik per seller beserta produk dengan gambar & deskripsi berbeda-beda
+  final Map<String, dynamic> _sellerDatabase = {
     'Berkah Farmer': {
       'banner': 'Asset/image/Berkah.jpg',
       'avatar': 'Asset/image/Bali.png',
-      'about': 'Peternakan sapi unggulan asal Bandung dengan pakan hijauan alami dan pengawasan dokter hewan rutin. Semua sapi sudah  dilengkapi sertifikat bebas PMK.',
+      'about': 'Peternakan sapi unggulan asal Bandung dengan pakan hijauan alami dan pengawasan dokter hewan rutin. Semua sapi sudah dilengkapi sertifikat bebas PMK.',
       'products': [
         {
           'name': 'Sapi Limousin Super',
           'weight': '450 kg',
+          'age': '2,5 tahun',
+          'breed': 'Sapi Limousin',
           'price': 'Rp 24.500.000',
           'image': 'Asset/image/Sapi.png',
+          'images': [
+            'Asset/image/Sapi.png',
+            'Asset/image/Bali.png',
+            'Asset/image/Brahman.jpeg',
+          ],
+          'category': 'Sapi',
+          'description': 'Sapi Limousin Super bobot 450 kg dengan postur padat dan sehat. Dirawat dengan pakan hijauan pilihan serta konsentrat alami, sudah divaksin dan dilengkapi surat keterangan bebas PMK.',
         },
         {
-          'name': 'kambimng Boer',
-          'weight': '330 kg',
-          'price': 'Rp 19.500.000',
+          'name': 'Kambing Boer',
+          'weight': '45 kg',
+          'age': '1,5 tahun',
+          'breed': 'Kambing Boer',
+          'price': 'Rp 4.900.000',
           'image': 'Asset/image/Boer.jpg',
+          'images': ['Asset/image/Boer.jpg', 'Asset/image/Boer.png'],
+          'category': 'Kambing',
+          'description': 'Kambing Boer pedaging unggulan dengan proporsi daging tebal dan tulang ramping. Kondisi lincah, nafsu makan sangat baik, dan memenuhi seluruh syarat sah hewan kurban.',
         },
         {
           'name': 'Sapi Brahman Cross',
-          'weight': '± 350 kg',
-          'price': 'Rp 3.100.000',
+          'weight': '380 kg',
+          'age': '2 tahun',
+          'breed': 'Sapi Brahman Cross',
+          'price': 'Rp 22.500.000',
           'image': 'Asset/image/Brahman.jpeg',
+          'images': ['Asset/image/Brahman.jpeg', 'Asset/image/Sapi.png'],
+          'category': 'Sapi',
+          'description': 'Sapi Brahman Cross berpunuk khas dengan daya tahan tubuh kuat. Sangat cocok untuk kurban keluarga maupun patungan 7 orang dengan estimasi karkas tinggi.',
         },
       ],
       'reviews': [
@@ -66,20 +89,35 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
         {
           'name': 'Kambing Boer Premium',
           'weight': '42 kg',
+          'age': '1,5 tahun',
+          'breed': 'Kambing Boer',
           'price': 'Rp 4.800.000',
           'image': 'Asset/image/Boer.png',
+          'images': ['Asset/image/Boer.png', 'Asset/image/Boer.jpg'],
+          'category': 'Kambing',
+          'description': 'Kambing Boer pilihan kualitas premium dari kandang Cianjur. Bulu bersih, tidak cacat fisik, cukup umur (poel), dan siap antar H-1 Idul Adha.',
         },
         {
           'name': 'Kambing Etawa Jantan',
           'weight': '38 kg',
+          'age': '1,5 tahun',
+          'breed': 'Kambing Etawa',
           'price': 'Rp 4.500.000',
           'image': 'Asset/image/Etawa.jpeg',
+          'images': ['Asset/image/Etawa.jpeg', 'Asset/image/Kambing.png'],
+          'category': 'Kambing',
+          'description': 'Kambing Etawa jantan bertubuh tinggi dan gagah. Perawatan rutin dengan pemeriksaan dokter hewan berkala sehingga terjamin kesehatan dan kebersihannya.',
         },
         {
           'name': 'Paket Aqiqah Siap Saji',
           'weight': '50 Box',
+          'age': '1 tahun',
+          'breed': 'Paket Olahan Aqiqah',
           'price': 'Rp 3.200.000',
           'image': 'Asset/image/Siapsaji.png',
+          'images': ['Asset/image/Siapsaji.png', 'Asset/image/Boer.png'],
+          'category': 'Aqiqah',
+          'description': 'Paket aqiqah praktis 50 box lengkap dengan olahan gulai dan sate bumbu rempah khas tanpa bau prengus. Sudah termasuk sertifikat aqiqah dan dokumentasi penyembelihan.',
         },
       ],
       'reviews': [
@@ -98,27 +136,42 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
       ],
     },
     'Maju Bersama Farm': {
-      'banner': 'Asset/image/Tree.png',
+      'banner': 'Asset/image/Tangguh.jpeg',
       'avatar': 'Asset/image/Domba.png',
       'about': 'Peternakan domba Garut pilihan langsung dari peternak lokal. Perawatan intensif di dataran tinggi menghasilkan ternak yang sehat dan lincah.',
       'products': [
         {
           'name': 'Domba Garut Tanduk',
           'weight': '40 kg',
+          'age': '1,5 tahun',
+          'breed': 'Domba Garut',
           'price': 'Rp 4.200.000',
           'image': 'Asset/image/Domba.png',
+          'images': ['Asset/image/Domba.png', 'Asset/image/Kambing.png'],
+          'category': 'Domba',
+          'description': 'Domba Garut bertanduk simetris dengan postur kekar dan sehat. Dipelihara di dataran tinggi berudara sejuk dengan pakan rumput segar pilihan.',
         },
         {
           'name': 'Domba Ekor Gemuk',
           'weight': '35 kg',
+          'age': '1,5 tahun',
+          'breed': 'Domba Ekor Gemuk',
           'price': 'Rp 3.600.000',
           'image': 'Asset/image/Kambing.png',
+          'images': ['Asset/image/Kambing.png', 'Asset/image/Domba.png'],
+          'category': 'Domba',
+          'description': 'Domba ekor gemuk dengan kualitas daging empuk dan gurih. Kondisi sehat, aktif, dan bebas penyakit kulit maupun kuku.',
         },
         {
           'name': 'Domba Aqiqah Sehat',
           'weight': '28 kg',
+          'age': '1 tahun',
+          'breed': 'Domba Lokal',
           'price': 'Rp 2.900.000',
           'image': 'Asset/image/Domba.png',
+          'images': ['Asset/image/Domba.png'],
+          'category': 'Domba',
+          'description': 'Domba sehat yang memenuhi syarat sah ibadah aqiqah maupun kurban hemat. Tersedia layanan potong di tempat atau kirim hidup ke alamat tujuan.',
         },
       ],
       'reviews': [
@@ -144,14 +197,24 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
         {
           'name': 'Sapi Brahman Cross',
           'weight': '410 kg',
+          'age': '2 tahun',
+          'breed': 'Sapi Brahman Cross',
           'price': 'Rp 22.800.000',
           'image': 'Asset/image/Sapi.png',
+          'images': ['Asset/image/Sapi.png', 'Asset/image/Brahman.jpeg'],
+          'category': 'Sapi',
+          'description': 'Sapi Brahman Cross langsung dari kandang Sumedang dengan bobot terukur timbangan digital. Sehat, terawat, dan gratis biaya perawatan hingga hari pengiriman.',
         },
         {
           'name': 'Kambing Jawa Randu',
           'weight': '34 kg',
+          'age': '1,5 tahun',
+          'breed': 'Kambing Jawa Randu',
           'price': 'Rp 3.400.000',
           'image': 'Asset/image/Kambing.png',
+          'images': ['Asset/image/Kambing.png', 'Asset/image/Etawa.jpeg'],
+          'category': 'Kambing',
+          'description': 'Kambing Jawa Randu jantan dengan harga bersahabat langsung dari peternak. Sudah memenuhi syarat syariat kurban dan siap dikirim dengan armada khusus.',
         },
       ],
       'reviews': [
@@ -165,16 +228,16 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
     },
   };
 
-  late Map _currentSellerData;
-  final List _hewanTersedia = [];
-  final List _ulasanList = [];
+  late Map<String, dynamic> _currentSellerData;
+  final List<dynamic> _hewanTersedia = [];
+  final List<dynamic> _ulasanList = [];
 
   @override
   void initState() {
     super.initState();
-    final String sellerName = widget.peternak['name'] ?? '';
+    final String sellerName = (widget.peternak['name'] ?? '').toString();
     _currentSellerData =
-        _sellerDatabase[sellerName] ??
+        (_sellerDatabase[sellerName] as Map<String, dynamic>?) ??
         {
           'banner': 'Asset/image/Bannersapi.png',
           'avatar': widget.peternak['image'] ?? 'Asset/image/Bali.png',
@@ -183,14 +246,24 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
             {
               'name': 'Sapi Limousin',
               'weight': '420 kg',
+              'age': '2 tahun',
+              'breed': 'Sapi Limousin',
               'price': 'Rp 24.500.000',
               'image': 'Asset/image/Sapi.png',
+              'images': ['Asset/image/Sapi.png', 'Asset/image/Bali.png'],
+              'category': 'Sapi',
+              'description': 'Sapi Limousin sehat dengan pakan hijauan berkualitas dan pengawasan rutin dokter hewan.',
             },
             {
               'name': 'Kambing Etawa',
               'weight': '38 kg',
+              'age': '1,5 tahun',
+              'breed': 'Kambing Etawa',
               'price': 'Rp 4.500.000',
-              'image': 'Asset/image/Kambinghidup.png',
+              'image': 'Asset/image/Etawa.jpeg',
+              'images': ['Asset/image/Etawa.jpeg', 'Asset/image/Kambing.png'],
+              'category': 'Kambing',
+              'description': 'Kambing Etawa sehat dan lincah, siap untuk kebutuhan kurban maupun aqiqah keluarga.',
             },
           ],
           'reviews': [
@@ -204,8 +277,8 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
           ],
         };
 
-    _hewanTersedia.addAll(_currentSellerData['products'] as List);
-    _ulasanList.addAll(_currentSellerData['reviews'] as List);
+    _hewanTersedia.addAll(_currentSellerData['products'] as List<dynamic>);
+    _ulasanList.addAll(_currentSellerData['reviews'] as List<dynamic>);
   }
 
   @override
@@ -227,141 +300,507 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
     });
   }
 
+  void _openChatPage([Map<String, dynamic>? selectedAnimal]) {
+    final String sellerName = (widget.peternak['name'] ?? 'Peternak QurbanMart')
+        .toString();
+    final String sellerLocation = (widget.peternak['location'] ?? 'Jawa Barat')
+        .toString();
+    final String sellerAvatar =
+        (widget.peternak['image'] ?? _currentSellerData['avatar']).toString();
+
+    final Map<String, dynamic> firstProduct = _hewanTersedia.isNotEmpty
+        ? Map<String, dynamic>.from(_hewanTersedia[0] as Map)
+        : <String, dynamic>{};
+
+    final Map<String, dynamic> chatPayload =
+        selectedAnimal ??
+        {
+          'name': sellerName,
+          'seller': sellerName,
+          'location': sellerLocation,
+          'image': sellerAvatar,
+          'price': (firstProduct['price'] ?? 'Rp 24.500.000').toString(),
+        };
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ChatPage(animal: chatPayload)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final String bannerImage = _currentSellerData['banner'];
+    final String bannerImage = _currentSellerData['banner'].toString();
     final String avatarImage =
-        widget.peternak['image'] ?? _currentSellerData['avatar'];
-    final String aboutText = _currentSellerData['about'];
+        (widget.peternak['image'] ?? _currentSellerData['avatar']).toString();
+    final String aboutText = _currentSellerData['about'].toString();
+    final String sellerName = (widget.peternak['name'] ?? 'Peternakan Mitra')
+        .toString();
+    final String sellerRating = (widget.peternak['rating'] ?? '4.9').toString();
+    final String sellerReviews =
+        (widget.peternak['reviews'] ?? '${_ulasanList.length} ulasan')
+            .toString();
+    final String sellerLocation =
+        (widget.peternak['location'] ?? 'Bandung, Jawa Barat').toString();
 
     return Scaffold(
       backgroundColor: _bgColor,
-      body: Stack(
+      body: Column(
         children: [
-          // KONTEN UTAMA
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 100),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // --- 1. HEADER (BANNER & AVATAR UNIK PER SELLER) ---
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      height: 180,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(bannerImage),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 50,
-                      left: 20,
-                      child: GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.arrow_back_ios_new,
-                            size: 20,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: -40,
-                      left: 24,
-                      child: Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 4),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 8,
+          // KONTEN UTAMA SCROLLABLE
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // --- 1. HEADER BANNER & AVATAR ---
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      SizedBox(
+                        height: 200,
+                        width: double.infinity,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            Image.asset(
+                              bannerImage,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    color: _primaryGreen.withValues(alpha: 0.2),
+                                  ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.black.withValues(alpha: 0.45),
+                                    Colors.transparent,
+                                    Colors.black.withValues(alpha: 0.15),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
-                          image: DecorationImage(
-                            image: AssetImage(avatarImage),
-                            fit: BoxFit.cover,
+                        ),
+                      ),
+                      // Tombol Kembali
+                      Positioned(
+                        top: MediaQuery.of(context).padding.top + 10,
+                        left: 20,
+                        child: Material(
+                          color: Colors.white.withValues(alpha: 0.95),
+                          shape: const CircleBorder(),
+                          elevation: 2,
+                          child: InkWell(
+                            onTap: () => Navigator.pop(context),
+                            customBorder: const CircleBorder(),
+                            child: const Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Icon(
+                                Icons.arrow_back_ios_new,
+                                size: 18,
+                                color: Color(0xFF1E293B),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 50),
+                      // Avatar Peternak + Indikator Online
+                      Positioned(
+                        bottom: -42,
+                        left: 24,
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 88,
+                              height: 88,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 4,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.12),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                                image: DecorationImage(
+                                  image: AssetImage(avatarImage),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: 4,
+                              bottom: 4,
+                              child: Container(
+                                width: 16,
+                                height: 16,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF22C55E),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Badge Terverifikasi
+                      Positioned(
+                        bottom: -28,
+                        right: 24,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _lightGreen,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: _primaryGreen.withValues(alpha: 0.2),
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.verified,
+                                color: _primaryGreen,
+                                size: 15,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                'Peternak Terpercaya',
+                                style: TextStyle(
+                                  color: _primaryGreen,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 52),
 
-                // --- 2. INFO PETERNAK ---
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
+                  // --- 2. PROFIL & STATISTIK SINGKAT PETERNAK ---
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          sellerName,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF0F172A),
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on_rounded,
+                              color: _primaryGreen,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                sellerLocation,
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        // Kartu Statistik 3 Kolom
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                            horizontal: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: Colors.grey.shade200),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.02),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _buildStatItem(
+                                  icon: Icons.star_rounded,
+                                  iconColor: Colors.amber,
+                                  value: sellerRating,
+                                  label: sellerReviews,
+                                ),
+                              ),
+                              _buildVerticalDivider(),
+                              Expanded(
+                                child: _buildStatItem(
+                                  icon: Icons.pets_rounded,
+                                  iconColor: _primaryGreen,
+                                  value: '${_hewanTersedia.length} Jenis',
+                                  label: 'Siap Kurban',
+                                ),
+                              ),
+                              _buildVerticalDivider(),
+                              Expanded(
+                                child: _buildStatItem(
+                                  icon: Icons.bolt_rounded,
+                                  iconColor: const Color(0xFF0284C7),
+                                  value: '± 5 Menit',
+                                  label: 'Respon Chat',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // --- 3. SEGMENTED TAB MENU ---
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEFF3F0),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(child: _buildTabItem('Tentang', 0)),
+                          Expanded(
+                            child: _buildTabItem(
+                              'Ulasan (${_ulasanList.length})',
+                              1,
+                            ),
+                          ),
+                          Expanded(
+                            child: _buildTabItem(
+                              'Produk (${_hewanTersedia.length})',
+                              2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // --- 4. KONTEN TAB 0: TENTANG ---
+                  if (_activeTab == 0) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.grey.shade200),
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const Text(
+                              'Tentang Peternakan',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFF1E293B),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
                             Text(
-                              widget.peternak['name'],
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w900,
+                              aboutText,
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontSize: 13.5,
+                                height: 1.55,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                _buildServiceBadge(
+                                  Icons.health_and_safety_rounded,
+                                  'Bebas PMK',
+                                ),
+                                _buildServiceBadge(
+                                  Icons.local_shipping_rounded,
+                                  'Pengiriman Aman',
+                                ),
+                                _buildServiceBadge(
+                                  Icons.verified_user_rounded,
+                                  'Mitra Terverifikasi',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Hewan Tersedia',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xFF0F172A),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => setState(() => _activeTab = 2),
+                            child: const Text(
+                              'Lihat Semua',
+                              style: TextStyle(
+                                fontSize: 12.5,
+                                fontWeight: FontWeight.w700,
+                                color: _primaryGreen,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    _buildProductGrid(),
+                  ],
+
+                  // --- 5. KONTEN TAB 1: ULASAN ---
+                  if (_activeTab == 1) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.grey.shade200),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Tulis Ulasan Anda',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14,
                                 color: Color(0xFF1E293B),
                               ),
                             ),
                             const SizedBox(height: 8),
                             Row(
-                              children: [
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                  size: 16,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  widget.peternak['rating'],
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
+                              children: List.generate(5, (index) {
+                                return GestureDetector(
+                                  onTap: () => setState(
+                                    () => _selectedRating = index + 1,
                                   ),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '(${widget.peternak['reviews']})',
-                                  style: TextStyle(
-                                    color: Colors.grey.shade500,
-                                    fontSize: 13,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 4),
+                                    child: Icon(
+                                      index < _selectedRating
+                                          ? Icons.star_rounded
+                                          : Icons.star_outline_rounded,
+                                      color: Colors.amber,
+                                      size: 28,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                );
+                              }),
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 12),
                             Row(
                               children: [
-                                const Icon(
-                                  Icons.location_on,
-                                  color: _primaryGreen,
-                                  size: 14,
-                                ),
-                                const SizedBox(width: 4),
                                 Expanded(
-                                  child: Text(
-                                    widget.peternak['location'],
+                                  child: TextField(
+                                    controller: _reviewController,
+                                    decoration: InputDecoration(
+                                      hintText:
+                                          'Tulis ulasan untuk $sellerName...',
+                                      hintStyle: TextStyle(
+                                        fontSize: 12.5,
+                                        color: Colors.grey.shade400,
+                                      ),
+                                      filled: true,
+                                      fillColor: const Color(0xFFF8FAFC),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                            horizontal: 14,
+                                            vertical: 11,
+                                          ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                          color: Colors.grey.shade300,
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                          color: Colors.grey.shade200,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                ElevatedButton(
+                                  onPressed: _tambahUlasan,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: _primaryGreen,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 13,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Kirim',
                                     style: TextStyle(
-                                      color: Colors.grey.shade600,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 13,
                                     ),
                                   ),
@@ -371,312 +810,163 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
                           ],
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE6F4EA),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.verified,
-                              color: _primaryGreen,
-                              size: 14,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              'Peternak Terpercaya',
-                              style: TextStyle(
-                                color: _primaryGreen,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // --- 3. TAB MENU (Tentang, Ulasan, Produk) ---
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildTabItem('Tentang', 0),
-                      _buildTabItem('Ulasan (${_ulasanList.length})', 1),
-                      _buildTabItem('Produk (${_hewanTersedia.length})', 2),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // --- 4. KONTEN TAB 0: TENTANG ---
-                if (_activeTab == 0) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      aboutText,
-                      style: TextStyle(
-                        color: Colors.grey.shade700,
-                        fontSize: 14,
-                        height: 1.5,
-                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: [
-                        _buildServiceBadge(
-                          Icons.health_and_safety,
-                          'Bebas PMK',
-                        ),
-                        _buildServiceBadge(
-                          Icons.local_shipping,
-                          'Pengiriman Aman',
-                        ),
-                        _buildServiceBadge(
-                          Icons.handshake,
-                          'Mitra Terverifikasi',
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      'Hewan Tersedia',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFF1E293B),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildProductGrid(),
-                ],
+                    const SizedBox(height: 16),
+                    ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: _ulasanList.length,
+                      itemBuilder: (context, index) {
+                        final item = Map<String, dynamic>.from(
+                          _ulasanList[index] as Map,
+                        );
+                        final String userName = item['user'].toString();
+                        final String initial = userName.isNotEmpty
+                            ? userName[0].toUpperCase()
+                            : 'U';
+                        final int ratingCount = (item['rating'] as int?) ?? 5;
 
-                // --- 5. KONTEN TAB 1: ULASAN LANGSUNG ---
-                if (_activeTab == 1) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey.shade200),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Tulis Ulasan Langsung',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: Color(0xFF1E293B),
-                            ),
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: Colors.grey.shade200),
                           ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: List.generate(5, (index) {
-                              return GestureDetector(
-                                onTap: () =>
-                                    setState(() => _selectedRating = index + 1),
-                                child: Icon(
-                                  index < _selectedRating
-                                      ? Icons.star
-                                      : Icons.star_border,
-                                  color: Colors.amber,
-                                  size: 24,
-                                ),
-                              );
-                            }),
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: TextField(
-                                  controller: _reviewController,
-                                  decoration: InputDecoration(
-                                    hintText:
-                                        'Bagikan pengalamanmu dengan ${widget.peternak['name']}...',
-                                    hintStyle: const TextStyle(fontSize: 12),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 10,
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(
-                                        color: Colors.grey.shade300,
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 17,
+                                    backgroundColor: _lightGreen,
+                                    child: Text(
+                                      initial,
+                                      style: const TextStyle(
+                                        color: _primaryGreen,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
                                       ),
                                     ),
                                   ),
-                                ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          userName,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Color(0xFF1E293B),
+                                          ),
+                                        ),
+                                        Row(
+                                          children: List.generate(
+                                            ratingCount,
+                                            (_) => const Icon(
+                                              Icons.star_rounded,
+                                              color: Colors.amber,
+                                              size: 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    item['date'].toString(),
+                                    style: TextStyle(
+                                      color: Colors.grey.shade500,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 8),
-                              ElevatedButton(
-                                onPressed: _tambahUlasan,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: _primaryGreen,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 14,
-                                    vertical: 12,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Kirim',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              const SizedBox(height: 10),
+                              Text(
+                                item['comment'].toString(),
+                                style: TextStyle(
+                                  color: Colors.grey.shade700,
+                                  fontSize: 13,
+                                  height: 1.45,
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: _ulasanList.length,
-                    itemBuilder: (context, index) {
-                      final item = _ulasanList[index];
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: Colors.grey.shade200),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  item['user'],
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
-                                    color: Color(0xFF1E293B),
-                                  ),
-                                ),
-                                Text(
-                                  item['date'],
-                                  style: TextStyle(
-                                    color: Colors.grey.shade500,
-                                    fontSize: 11,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 4),
-                            Row(
-                              children: List.generate(
-                                item['rating'],
-                                (_) => const Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                  size: 14,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              item['comment'],
-                              style: TextStyle(
-                                color: Colors.grey.shade700,
-                                fontSize: 13,
-                                height: 1.4,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                  ],
 
-                // --- 6. KONTEN TAB 2: DAFTAR PRODUK ---
-                if (_activeTab == 2) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      'Daftar Produk ${widget.peternak['name']}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFF1E293B),
+                  // --- 6. KONTEN TAB 2: DAFTAR PRODUK ---
+                  if (_activeTab == 2) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        'Katalog $sellerName',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                          color: Color(0xFF0F172A),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildProductGrid(),
+                    const SizedBox(height: 14),
+                    _buildProductGrid(),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
 
-          // --- 7. TOMBOL HUBUNGI PETERNAK ---
-          Positioned(
-            bottom: 24,
-            left: 24,
-            right: 24,
+          // --- 7. BOTTOM BAR TOMBOL CHAT LANGSUNG ---
+          Container(
+            padding: EdgeInsets.fromLTRB(
+              24,
+              12,
+              24,
+              MediaQuery.of(context).padding.bottom + 14,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: 12,
+                  offset: const Offset(0, -4),
+                ),
+              ],
+            ),
             child: SizedBox(
-              height: 55,
+              width: double.infinity,
+              height: 52,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Menghubungi ${widget.peternak['name']}...',
-                      ),
-                      backgroundColor: _primaryGreen,
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.person, color: Colors.white),
+                onPressed: () => _openChatPage(),
+                icon: const Icon(
+                  Icons.chat_bubble_outline_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
                 label: const Text(
-                  'Hubungi Peternak',
+                  'Chat Peternak',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 15,
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _primaryGreen,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(14),
                   ),
-                  elevation: 5,
-                  shadowColor: _primaryGreen.withValues(alpha: 0.4),
                 ),
               ),
             ),
@@ -684,6 +974,44 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
         ],
       ),
     );
+  }
+
+  Widget _buildStatItem({
+    required IconData icon,
+    required Color iconColor,
+    required String value,
+    required String label,
+  }) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: iconColor, size: 16),
+            const SizedBox(width: 4),
+            Text(
+              value,
+              style: const TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 13,
+                color: Color(0xFF0F172A),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 3),
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVerticalDivider() {
+    return Container(height: 28, width: 1, color: Colors.grey.shade200);
   }
 
   Widget _buildProductGrid() {
@@ -693,32 +1021,45 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 0.80,
+        crossAxisSpacing: 14,
+        mainAxisSpacing: 14,
+        childAspectRatio: 0.78,
       ),
       itemCount: _hewanTersedia.length,
       itemBuilder: (context, index) {
-        return _buildAnimalCard(_hewanTersedia[index]);
+        final animalMap = Map<String, dynamic>.from(
+          _hewanTersedia[index] as Map,
+        );
+        return _buildAnimalCard(animalMap);
       },
     );
   }
 
-  // WIDGET BANTUAN UNTUK TAB
   Widget _buildTabItem(String title, int index) {
-    bool isActive = _activeTab == index;
+    final bool isActive = _activeTab == index;
     return GestureDetector(
       onTap: () => setState(() => _activeTab = index),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: isActive ? _primaryGreen : const Color(0xFFF1F5F9),
-          borderRadius: BorderRadius.circular(20),
+          color: isActive ? _primaryGreen : Colors.transparent,
+          borderRadius: BorderRadius.circular(11),
+          boxShadow: isActive
+              ? [
+                  BoxShadow(
+                    color: _primaryGreen.withValues(alpha: 0.2),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : [],
         ),
+        alignment: Alignment.center,
         child: Text(
           title,
           style: TextStyle(
-            color: isActive ? Colors.white : Colors.grey.shade600,
+            color: isActive ? Colors.white : Colors.grey.shade700,
             fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
             fontSize: 12,
           ),
@@ -727,26 +1068,24 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
     );
   }
 
-  // WIDGET BANTUAN UNTUK BADGE (Bebas PMK, dll)
   Widget _buildServiceBadge(IconData icon, String text) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFFDFBF7),
+        color: _lightGreen.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade200),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, color: _primaryGreen, size: 14),
-          const SizedBox(width: 6),
+          const SizedBox(width: 5),
           Text(
             text,
             style: const TextStyle(
-              color: Color(0xFF334155),
+              color: _primaryGreen,
               fontSize: 11,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],
@@ -754,76 +1093,114 @@ class _FarmDetailPageState extends State<FarmDetailPage> {
     );
   }
 
-  // WIDGET KARTU HEWAN TERSEDIA
-  Widget _buildAnimalCard(dynamic animal) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+  Widget _buildAnimalCard(Map<String, dynamic> animal) {
+    final Map<String, dynamic> fullAnimalData = {
+      ...animal,
+      'location': widget.peternak['location'] ?? 'Bandung, Jawa Barat',
+      'seller': widget.peternak['name'] ?? 'Peternakan Mitra',
+      'rating': widget.peternak['rating'] ?? '4.9',
+      'reviews': widget.peternak['reviews'] ?? '120 ulasan',
+    };
+
+    return GestureDetector(
+      onTap: () {
+        // Langsung berpindah ke halaman AnimalDetailPage membawa data unik hewan ini
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AnimalDetailPage(animal: fullAnimalData),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-              ),
-              child: Image.asset(
-                animal['image'],
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (ctx, err, stack) => Container(
-                  color: Colors.grey.shade200,
-                  child: const Icon(Icons.image),
-                ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                    child: Image.asset(
+                      animal['image'].toString(),
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Colors.grey.shade100,
+                        child: const Icon(Icons.pets, color: _primaryGreen),
+                      ),
+                    ),
+                  ),
+                  if (animal['weight'] != null)
+                    Positioned(
+                      bottom: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.65),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          animal['weight'].toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  animal['name'],
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                    color: Color(0xFF1E293B),
-                  ),
-                ),
-                if (animal['weight'] != null) ...[
-                  const SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    'Estimasi: ${animal['weight']}',
-                    style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                    animal['name'].toString(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13.5,
+                      color: Color(0xFF1E293B),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    animal['price'].toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 13.5,
+                      color: _primaryGreen,
+                    ),
                   ),
                 ],
-                const SizedBox(height: 4),
-                Text(
-                  animal['price'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 13,
-                    color: _primaryGreen,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

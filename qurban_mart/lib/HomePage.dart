@@ -210,8 +210,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                       _buildCategoryItem('Asset/image/logoDomba.jpeg', 'Domba'),
                       _buildCategoryItem(
-                        'Asset/image/logoSapi.jpeg',
-                        'Patungan\nSapi 1/7',
+                        'Asset/image/logoPatungan.jpeg',
+                        'Patungan',
                       ),
                     ],
                   ),
@@ -251,14 +251,14 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Expanded(
                         child: _buildAqiqahCard(
-                          'Asset/image/Kambinghidup.png',
+                          'Asset/image/hidup.png',
                           'Kambing Hidup',
                         ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: _buildAqiqahCard(
-                          'Asset/image/Siapsaji.png',
+                          'Asset/image/Makan.png',
                           'Paket Siap Saji',
                         ),
                       ),
@@ -396,11 +396,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   // WIDGET KARTU AQIQAH
+  // WIDGET KARTU AQIQAH
   Widget _buildAqiqahCard(String imagePath, String title) {
+    final bool isCutout = imagePath.toLowerCase().contains('hidup');
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
@@ -415,21 +418,31 @@ class _HomePageState extends State<HomePage> {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
+              topLeft: Radius.circular(18),
+              topRight: Radius.circular(18),
             ),
-            child: Image.asset(
-              imagePath,
-              height: 100,
+            child: Container(
+              height: 140, // Ukuran kotak diperbesar dari 100 ke 140
               width: double.infinity,
-              fit: BoxFit.cover,
+              color: isCutout ? const Color(0xFFF6FAF6) : Colors.grey.shade100,
+              padding: isCutout
+                  ? const EdgeInsets.fromLTRB(10, 10, 10, 0)
+                  : EdgeInsets.zero,
+              child: Image.asset(
+                imagePath,
+                fit: isCutout ? BoxFit.contain : BoxFit.cover,
+              ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             child: Text(
               title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                color: Color(0xFF1E293B),
+              ),
             ),
           ),
         ],
